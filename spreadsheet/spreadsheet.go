@@ -21,7 +21,7 @@ func getClient(credential string, tokFile string) (*http.Client, error) {
 
 	b, err := ioutil.ReadFile(cred)
 	if err != nil {
-		b = []byte(cred)
+		b = []byte(credential)
 	}
 	conf, err := google.ConfigFromJSON(b, "https:/www.googleapis.com/auth/spreadsheets.readonly")
 	if err != nil {
