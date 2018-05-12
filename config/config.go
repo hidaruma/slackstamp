@@ -50,8 +50,7 @@ func LoadToml(fp string) (*Config, error) {
 					Name: os.Getenv("SHEET_NAME"),
 				},
 		}
-	}
-	if err := toml.NewDecoder(tf).Decode(&conf); err != nil {
+	} else if err := toml.NewDecoder(tf).Decode(&conf); err != nil {
 		return nil, err
 	}
 	return &conf, nil
