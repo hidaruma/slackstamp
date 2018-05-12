@@ -1,0 +1,5 @@
+"heroku": {
+	"install": [
+		"./cmd/..."
+	]
+},
