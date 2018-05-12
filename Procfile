@@ -1,1 +1,1 @@
-web: "slackstamp"
+web: slackstamp
