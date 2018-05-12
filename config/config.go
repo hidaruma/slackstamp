@@ -46,8 +46,8 @@ func LoadToml(fp string) (*Config, error) {
 				SpreadSheetConfig{
 					Secret: os.Getenv("SECRET_JSON"),
 					Token: os.Getenv("OAUTH_TOKEN"),
-					ID: os.Getenv("SheetID"),
-					Name: os.Getenv("SheetName"),
+					ID: os.Getenv("SHEET_ID"),
+					Name: os.Getenv("SHEET_NAME"),
 				},
 		}
 	}
