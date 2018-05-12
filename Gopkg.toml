@@ -30,7 +30,7 @@
   unused-packages = true
   
 [metadata.heroku]
-  root-package = "slackstamp"
+  root-package = "/github.com/hidaruma/slackstamp"
   go-version = "go1.10.2"
-  install = [ ".", "./cmd/..." ]
+  install = [ ".", "./cmd/" ]
   ensure = true
