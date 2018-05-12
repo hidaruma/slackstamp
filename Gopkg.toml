@@ -28,3 +28,9 @@
 [prune]
   go-tests = true
   unused-packages = true
+  
+[metadata.heroku]
+  root-package = "github.com/hidaruma/slackstamp"
+  go-version = "go1.10.2"
+  install = [ ".", "./cmd/..." ]
+  ensure = true
