@@ -35,7 +35,21 @@ func LoadToml(fp string) (*Config, error) {
 	tf, err := os.Open(f)
 	defer tf.Close()
 	if err != nil {
-		return nil, err
+	conf = Config{
+			 SlackConfig{
+				Token: os.Getenv("SLACK_TOKEN"),
+				},
+				ServerConfig{
+					Port: os.Getenv("PORT"),
+					EndPoint: os.Getenv("ENDPOINT"),
+				},
+				SpreadSheetConfig{
+					Secret: os.Getenv("SECRET_JSON"),
+					Token: os.Getenv("OAUTH_TOKEN"),
+					ID: os.Getenv("SheetID"),
+					Name: os.Getenv("SheetName"),
+				},
+		}
 	}
 	if err := toml.NewDecoder(tf).Decode(&conf); err != nil {
 		return nil, err

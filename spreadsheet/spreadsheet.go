@@ -16,14 +16,13 @@ import (
 
 type Emoji2Stamp  map[string]string
 
-func getClient(credentialFilePath string, tokFile string) (*http.Client, error) {
-	cred :=filepath.ToSlash(credentialFilePath)
+func getClient(credential string, tokFile string) (*http.Client, error) {
+	cred :=filepath.ToSlash(credential)
 
 	b, err := ioutil.ReadFile(cred)
 	if err != nil {
-		return nil, err
+		b = []byte(cred)
 	}
-	fmt.Println(b)
 	conf, err := google.ConfigFromJSON(b, "https:/www.googleapis.com/auth/spreadsheets.readonly")
 	if err != nil {
 		return nil, err
