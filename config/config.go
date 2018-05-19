@@ -24,7 +24,7 @@ type ServerConfig struct {
 
 type SpreadSheetConfig struct {
 	Secret string `toml:"secret"`
-	Token string `toml:"token"`
+	Cred string `toml:"cred"`
 	ID string `toml:"id"`
 	Name string `toml:"name"`
 }
@@ -35,7 +35,7 @@ func LoadToml(fp string) (*Config, error) {
 	tf, err := os.Open(f)
 	defer tf.Close()
 	if err != nil {
-	conf = Config{
+		conf = Config{
 			 SlackConfig{
 				Token: os.Getenv("SLACK_TOKEN"),
 				},
@@ -45,7 +45,7 @@ func LoadToml(fp string) (*Config, error) {
 				},
 				SpreadSheetConfig{
 					Secret: os.Getenv("SECRET_JSON"),
-					Token: os.Getenv("OAUTH_TOKEN"),
+					Cred: os.Getenv("CRED"),
 					ID: os.Getenv("SHEET_ID"),
 					Name: os.Getenv("SHEET_NAME"),
 				},

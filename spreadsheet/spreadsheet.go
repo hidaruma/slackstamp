@@ -16,6 +16,8 @@ import (
 
 type Emoji2Stamp  map[string]string
 
+
+
 func getClient(credential string, tokFile string) (*http.Client, error) {
 	cred :=filepath.ToSlash(credential)
 
@@ -23,18 +25,22 @@ func getClient(credential string, tokFile string) (*http.Client, error) {
 	if err != nil {
 		b = []byte(credential)
 	}
+	fmt.Println(b)
 	conf, err := google.ConfigFromJSON(b, "https:/www.googleapis.com/auth/spreadsheets.readonly")
 	if err != nil {
+		fmt.Println("^^^^^^^^^^^^^^as^^^")
 		return nil, err
 	}
 	tok, err := tokenFromFile(tokFile)
 	if err != nil {
+		fmt.Println("--as-a-s-")
 		tok = getTokenFromWeb(conf)
 		saveToken(tokFile, tok)
 	}
 
 	return conf.Client(context.Background(), tok), nil
 }
+
 
 func saveToken(tokFile string, tok *oauth2.Token) {
 	fp := filepath.ToSlash(tokFile)
@@ -53,7 +59,7 @@ func getTokenFromWeb(conf *oauth2.Config) *oauth2.Token {
 	if _, err := fmt.Scan(&authCode); err != nil {
 		os.Exit(1)
 	}
-	tok, err := conf.Exchange(oauth2.NoContext, authCode)
+	tok, err := conf.Exchange(context.Background(), authCode)
 	if err != nil {
 		fmt.Println("Unable to retrieve token from web")
 	}
@@ -77,7 +83,7 @@ func GetSheet(sheetID string, credFP string, tokFile string) (*sheets.Spreadshee
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(client)
+
 	s, err := sheets.New(client)
 	if err != nil {
 		return nil, err

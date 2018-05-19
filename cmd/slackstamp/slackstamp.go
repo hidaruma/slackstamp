@@ -13,10 +13,9 @@ func main() {
 	conf, err := config.LoadToml("conf.toml")
 	if err != nil {
 		fmt.Println("No config")
-		os.Exit(1)
 	}
-	fmt.Println(conf)
 	sheet, err := spreadsheet.GetSheet(conf.SpreadSheet.ID, conf.SpreadSheet.Secret, conf.SpreadSheet.Token)
+	
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
