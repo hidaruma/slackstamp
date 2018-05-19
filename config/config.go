@@ -24,7 +24,7 @@ type ServerConfig struct {
 
 type SpreadSheetConfig struct {
 	Secret string `toml:"secret"`
-	Cred string `toml:"cred"`
+	Token string `toml:"token"`
 	ID string `toml:"id"`
 	Name string `toml:"name"`
 }
@@ -45,7 +45,7 @@ func LoadToml(fp string) (*Config, error) {
 				},
 				SpreadSheetConfig{
 					Secret: os.Getenv("SECRET_JSON"),
-					Cred: os.Getenv("CRED"),
+					Token: os.Getenv("TOKEN"),
 					ID: os.Getenv("SHEET_ID"),
 					Name: os.Getenv("SHEET_NAME"),
 				},
