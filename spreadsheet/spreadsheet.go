@@ -53,8 +53,12 @@ func getTokenFromWeb(conf *oauth2.Config) *oauth2.Token {
 	authURL := conf.AuthCodeURL("state-token", oauth2.AccessTypeOffline)
 	fmt.Println("Go to the following link in your browser then type the auth code: %v\n", authURL)
 	var authCode string
-	if _, err := fmt.Scan(&authCode); err != nil {
-		os.Exit(1)
+	authCode = os.Getenv("AUTHCODE")
+	if authCode == "" {
+
+		if _, err := fmt.Scan(&authCode); err != nil {
+			os.Exit(1)
+		}
 	}
 	tok, err := conf.Exchange(context.Background(), authCode)
 	if err != nil {
