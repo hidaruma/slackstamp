@@ -50,6 +50,9 @@ func main() {
 	}
 
 	})
+
+	http.Handle("/policy", http.StripPrefix("/policy", http.FileServer(http.Dir("../../public/policy"))))
+	http.Handle("/terms", http.StripPrefix("/terms", http.FileServer(http.Dir("../../public/terms/"))))
 	err = http.ListenAndServe(conf.Server.Port, nil)
 	if err != nil {
 		fmt.Println(err)
