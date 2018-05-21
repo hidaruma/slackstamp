@@ -21,8 +21,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	var mapping spreadsheet.Emoji2Stamp
-	err = mapping.SetMapping(sheet, conf.SpreadSheet.ID, conf.SpreadSheet.Name)
+	var mapping map[string]string
+	mapping, err = spreadsheet.SetMapping(sheet, conf.SpreadSheet.ID, conf.SpreadSheet.Name)
 	if err != nil {
 		fmt.Println("Invalid Sheet Schema or etc.")
 

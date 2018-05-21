@@ -7,7 +7,6 @@ import (
 	"github.com/nlopes/slack"
 	"fmt"
 	"errors"
-	"github.com/hidaruma/slackstamp/spreadsheet"
 	"encoding/json"
 	"net/http"
 )
@@ -132,7 +131,7 @@ func getUserIcon(userID string, st string) (string, error) {
 	return iconURL, nil
 }
 
-func GetStampURL(emoji string, mapping spreadsheet.Emoji2Stamp) string {
+func GetStampURL(emoji string, mapping map[string]string) string {
 	imageURL := mapping[emoji]
 	return imageURL
 }

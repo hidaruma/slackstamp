@@ -14,19 +14,16 @@ import (
 	"log"
 )
 
-type Emoji2Stamp  map[string]string
 
+func getClient(secretJson string, tokFile string) (*http.Client, error) {
+	secret :=filepath.ToSlash(secretJson)
 
-
-func getClient(credential string, tokFile string) (*http.Client, error) {
-	cred :=filepath.ToSlash(credential)
-
-	b, err := ioutil.ReadFile(cred)
+	b, err := ioutil.ReadFile(secret)
 	if err != nil {
-		b = []byte(credential)
+		b = []byte(secret)
 	}
 	fmt.Println(b)
-	conf, err := google.ConfigFromJSON(b, "https:/www.googleapis.com/auth/spreadsheets.readonly")
+	conf, err := google.ConfigFromJSON(b, "https://www.googleapis.com/auth/spreadsheets.readonly")
 	if err != nil {
 		fmt.Println("^^^^^^^^^^^^^^as^^^")
 		return nil, err
@@ -78,8 +75,8 @@ func tokenFromFile(file string) (*oauth2.Token, error) {
 	return tok, err
 }
 
-func GetSheet(sheetID string, credFP string, tokFile string) (*sheets.SpreadsheetsService, error) {
-	client, err := getClient(credFP, tokFile)
+func GetSheet(sheetID string, secret string, tokFile string) (*sheets.SpreadsheetsService, error) {
+	client, err := getClient(secret, tokFile)
 	if err != nil {
 		return nil, err
 	}
@@ -92,16 +89,18 @@ func GetSheet(sheetID string, credFP string, tokFile string) (*sheets.Spreadshee
 }
 
 
-func (e2s Emoji2Stamp) SetMapping(ss *sheets.SpreadsheetsService, sheetID string, sheetName string) error {
+func SetMapping(ss *sheets.SpreadsheetsService, sheetID string, sheetName string) (map[string]string, error) {
+	var e2s map[string]string
+	e2s = map[string]string{}
 	//	readRange := "Class " + sheetName + "!A2:B"
 	resp, err := ss.Values.Get(sheetID, "Data!A2:B").Do()
 	if err != nil {
-		return err
+		return nil, err
 	}
 	for _, row := range resp.Values {
 		emoji := row[0].(string)
 		url := row[1].(string)
-	Emoji2Stamp(e2s)[emoji] = url
+		e2s[emoji] = url
 	}
-	return nil
+	return e2s, nil
 }
