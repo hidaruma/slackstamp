@@ -44,7 +44,7 @@ func LoadToml(fp string) (*Config, error) {
 					EndPoint: os.Getenv("ENDPOINT"),
 				},
 				SpreadSheetConfig{
-					Secret: os.Getenv("SECRET_JSON"),
+					Secret: os.Getenv("CLIENT_JSON"),
 					Token: os.Getenv("TOKEN"),
 					ID: os.Getenv("SHEET_ID"),
 					Name: os.Getenv("SHEET_NAME"),
