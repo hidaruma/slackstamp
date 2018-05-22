@@ -25,7 +25,6 @@ func getClient(secretJson string, tokFile string) (*http.Client, error) {
 	fmt.Println(b)
 	conf, err := google.ConfigFromJSON(b, "https://www.googleapis.com/auth/spreadsheets.readonly")
 	if err != nil {
-		fmt.Println("^^^^^^^^^^^^^^as^^^")
 		return nil, err
 	}
 	tok, err := tokenFromFile(tokFile)
@@ -33,11 +32,10 @@ func getClient(secretJson string, tokFile string) (*http.Client, error) {
 		tok, err = tokenFromVar(conf)
 		if err != nil {
 
+			tok = getTokenFromWeb(conf)
+			saveToken(tokFile, tok)
 		}
-		tok = getTokenFromWeb(conf)
-		saveToken(tokFile, tok)
-		}
-
+	}
 
 	return conf.Client(context.Background(), tok), nil
 }
