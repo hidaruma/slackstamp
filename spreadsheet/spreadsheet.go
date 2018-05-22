@@ -12,7 +12,6 @@ import (
 	"encoding/json"
 	"os"
 	"log"
-	"strings"
 	"time"
 )
 
@@ -69,14 +68,13 @@ fmt.Println("Unable to retrieve token from web")
 
 func tokenFromVar(conf *oauth2.Config) (*oauth2.Token, error) {
 	tokenRaw := os.Getenv("ACCESS_TOKEN")
-	dec := json.NewDecoder(strings.NewReader(tokenRaw))
 	var tokJson struct{
 		accessToken string `json:"access_token"`
 		tokenType string `json:"token_type"`
 		refreshToken string `json:"refresh_token"`
 		expiry float64 `json:"expires_in"`
 	}
-	err := dec.Decode(&tokJson)
+	err := json.Unmarshal([]byte(tokenRaw), &tokJson)
 	fmt.Println(tokJson.accessToken)
 	tok := &oauth2.Token{
 		AccessToken:tokJson.accessToken,
