@@ -69,7 +69,7 @@ fmt.Println("Unable to retrieve token from web")
 
 func tokenFromVar(conf *oauth2.Config) (*oauth2.Token, error) {
 	tokenRaw := os.Getenv("ACCESS_TOKEN")
-
+	fmt.Println(tokenRaw)
 	dec := json.NewDecoder(strings.NewReader(tokenRaw))
 	var tokJson struct{
 		accessToken string `json:"access_token"`
