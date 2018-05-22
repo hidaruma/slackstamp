@@ -74,6 +74,7 @@ func tokenFromVar(conf *oauth2.Config) (*oauth2.Token, error) {
 		refreshToken string `json:"refresh_token"`
 		tokenType string `json:"token_type"`
 	}
+	fmt.Printf("%v\n", tokenRaw)
 	err := json.Unmarshal([]byte(tokenRaw), &tokJson)
 	fmt.Println(tokJson.accessToken)
 	tok := &oauth2.Token{
