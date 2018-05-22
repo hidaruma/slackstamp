@@ -28,14 +28,14 @@ func main() {
 		fmt.Println("Invalid Sheet Schema or etc.")
 
 	}
-
+	api := slack.New(conf.Slack.Token)
 	http.HandleFunc(conf.Server.EndPoint, func(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	sm, err := webhook.ParseSlackMessage(r)
 	if err != nil {
 		fmt.Println(err)
 	}
-	api := slack.New(conf.Slack.Token)
+
 	if webhook.IsEmoji(sm.Text) {
 		stampURL := webhook.GetStampURL(sm.Text, mapping)
 		if stampURL == "" {
