@@ -78,7 +78,7 @@ func tokenFromVar(conf *oauth2.Config) (*oauth2.Token, error) {
 	at := tokMap["access_token"].(string)
 	tt := tokMap["token_type"].(string)
 	rt := tokMap["refresh_token"].(string)
-	ep := tokMap["expires_in"].(int)
+	ep := tokMap["expires_in"].(float64)
 	tok := &oauth2.Token{
 		AccessToken: at,
 		TokenType: tt,
