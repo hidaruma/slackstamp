@@ -117,7 +117,7 @@ func GetSheet(sheetID string, secret string, tokFile string) (*sheets.Spreadshee
 func SetMapping(ss *sheets.SpreadsheetsService, sheetID string, sheetName string) (map[string]string, error) {
 	var e2s map[string]string
 	e2s = map[string]string{}
-	//	readRange := "Class " + sheetName + "!A2:B"
+	//	readRange := + sheetName + "!A2:B"
 	resp, err := ss.Values.Get(sheetID, "Data!A2:B").Do()
 	if err != nil {
 		return nil, err
