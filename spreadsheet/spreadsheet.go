@@ -78,6 +78,10 @@ func tokenFromVar(conf *oauth2.Config) (*oauth2.Token, error) {
 	tokJson := new(tokenJson)
 	fmt.Printf("%v\n", tokenRaw)
 	err := json.Unmarshal([]byte(tokenRaw), tokJson)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 	fmt.Println(tokJson.accessToken)
 	tok := &oauth2.Token{
 		AccessToken:tokJson.accessToken,
