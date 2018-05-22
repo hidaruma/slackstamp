@@ -70,9 +70,10 @@ func tokenFromVar(conf *oauth2.Config) (*oauth2.Token, error) {
 	tokenRaw := os.Getenv("ACCESS_TOKEN")
 	var tokJson struct{
 		accessToken string `json:"access_token"`
+		expiry float64 `json:"expires_in"`
 		tokenType string `json:"token_type"`
 		refreshToken string `json:"refresh_token"`
-		expiry float64 `json:"expires_in"`
+
 	}
 	err := json.Unmarshal([]byte(tokenRaw), &tokJson)
 	fmt.Println(tokJson.accessToken)
