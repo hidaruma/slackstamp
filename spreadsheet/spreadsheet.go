@@ -118,7 +118,7 @@ func SetMapping(ss *sheets.SpreadsheetsService, sheetID string, sheetName string
 	var e2s map[string]string
 	e2s = map[string]string{}
 	//	readRange := + sheetName + "!A2:B"
-	resp, err := ss.Values.Get("1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms", "Data!A1:B").Do()
+	resp, err := ss.Values.Get("1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms", "Class Data!A1:B").Do()
 	if err != nil {
 		fmt.Println("Error get val")
 		return nil, err
