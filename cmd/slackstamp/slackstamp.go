@@ -22,6 +22,7 @@ func main() {
 	}
 
 	var mapping map[string]string
+	mapping = map[string]string{}
 	mapping, err = spreadsheet.SetMapping(sheet, conf.SpreadSheet.ID, conf.SpreadSheet.Name)
 	if err != nil {
 		fmt.Println("Invalid Sheet Schema or etc.")
