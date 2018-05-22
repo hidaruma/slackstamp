@@ -14,7 +14,7 @@ func main() {
 	if err != nil {
 		fmt.Println("No config")
 	}
-	sheet, err := spreadsheet.GetSheet(conf.SpreadSheet.ID, conf.SpreadSheet.Secret, conf.SpreadSheet.Token)
+	sheet, err := spreadsheet.GetSheet(conf.SpreadSheet.Secret, conf.SpreadSheet.Token)
 	
 	if err != nil {
 		fmt.Println(err)

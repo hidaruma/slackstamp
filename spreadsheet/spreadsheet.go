@@ -78,6 +78,7 @@ func tokenFromVar(conf *oauth2.Config) (*oauth2.Token, error) {
 		expiry int64 `json:"expires_in"`
 	}
 	err := dec.Decode(&tokJson)
+	fmt.Println(tokJson)
 	tok := &oauth2.Token{
 		AccessToken:tokJson.accessToken,
 		TokenType: tokJson.tokenType,
@@ -100,7 +101,7 @@ func tokenFromFile(file string) (*oauth2.Token, error) {
 	return tok, err
 }
 
-func GetSheet(sheetID string, secret string, tokFile string) (*sheets.SpreadsheetsService, error) {
+func GetSheet(secret string, tokFile string) (*sheets.SpreadsheetsService, error) {
 	client, err := getClient(secret, tokFile)
 	if err != nil {
 		return nil, err
