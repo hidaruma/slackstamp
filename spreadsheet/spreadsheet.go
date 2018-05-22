@@ -66,28 +66,24 @@ fmt.Println("Unable to retrieve token from web")
 	return tok
 }
 
-type tokenJson struct {
-	accessToken string `json:"access_token"`
-	expiry int `json:"expires_in"`
-	refreshToken string `json:"refresh_token"`
-	tokenType string `json:"token_type"`
-}
-
 func tokenFromVar(conf *oauth2.Config) (*oauth2.Token, error) {
 	tokenRaw := os.Getenv("ACCESS_TOKEN")
-	tokJson := new(tokenJson)
-	fmt.Printf("json:%v\n", tokJson)
+	var tokJson interface{}
 	err := json.Unmarshal(([]byte)(tokenRaw), &tokJson)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	fmt.Printf("%v\n", tokJson)
+	tokMap := tokJson.(map[string]interface{})
+	at := tokMap["access_token"].(string)
+	tt := tokMap["token_type"].(string)
+	rt := tokMap["refresh_token"].(string)
+	ep := tokMap["expires_in"].(int)
 	tok := &oauth2.Token{
-		AccessToken:tokJson.accessToken,
-		TokenType: tokJson.tokenType,
-		RefreshToken: tokJson.refreshToken,
-		Expiry: time.Now().Add(time.Duration(tokJson.expiry) * time.Second),
+		AccessToken: at,
+		TokenType: tt,
+		RefreshToken: rt,
+		Expiry: time.Now().Add(time.Duration(ep) * time.Second),
 	}
 	fmt.Println(tok)
 	return tok, err
