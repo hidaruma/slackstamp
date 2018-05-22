@@ -121,6 +121,7 @@ func SetMapping(ss *sheets.SpreadsheetsService, sheetID string, sheetName string
 	resp, err := ss.Values.Get(sheetID, "Data!A2:B").Do()
 	if err != nil {
 		return nil, err
+		fmt.Println("Error is here")
 	}
 	for _, row := range resp.Values {
 		emoji := row[0].(string)
