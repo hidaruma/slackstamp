@@ -69,7 +69,6 @@ fmt.Println("Unable to retrieve token from web")
 
 func tokenFromVar(conf *oauth2.Config) (*oauth2.Token, error) {
 	tokenRaw := os.Getenv("ACCESS_TOKEN")
-	fmt.Println(tokenRaw)
 	dec := json.NewDecoder(strings.NewReader(tokenRaw))
 	var tokJson struct{
 		accessToken string `json:"access_token"`
@@ -78,7 +77,7 @@ func tokenFromVar(conf *oauth2.Config) (*oauth2.Token, error) {
 		expiry int64 `json:"expires_in"`
 	}
 	err := dec.Decode(&tokJson)
-	fmt.Println(tokJson)
+	fmt.Println(tokJson.accessToken)
 	tok := &oauth2.Token{
 		AccessToken:tokJson.accessToken,
 		TokenType: tokJson.tokenType,
