@@ -127,6 +127,7 @@ func SetMapping(ss *sheets.SpreadsheetsService, sheetID string, sheetName string
 		emoji := row[0].(string)
 		url := row[1].(string)
 		e2s[emoji] = url
+		fmt.Printf("%s:%s\n", emoji, url)
 	}
 	return e2s, nil
 }
