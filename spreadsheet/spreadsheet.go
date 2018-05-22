@@ -74,7 +74,7 @@ func tokenFromVar(conf *oauth2.Config) (*oauth2.Token, error) {
 		accessToken string `json:"access_token"`
 		tokenType string `json:"token_type"`
 		refreshToken string `json:"refresh_token"`
-		expiry int64 `json:"expires_in"`
+		expiry float64 `json:"expires_in"`
 	}
 	err := dec.Decode(&tokJson)
 	fmt.Println(tokJson.accessToken)
