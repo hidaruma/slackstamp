@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/hidaruma/slackstamp/config"
 	"os"
+	"github.com/nlopes/slack"
 )
 
 func main() {
@@ -20,7 +21,7 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	fmt.Println("Get Sheet is succeeded?")
+
 
 	mapping, err := spreadsheet.SetMapping(sheet, conf.SpreadSheet.ID, conf.SpreadSheet.Name)
 	if err != nil {
@@ -34,13 +35,14 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
+	api := slack.New(conf.Slack.Token)
 	if webhook.IsEmoji(sm.Text) {
 		stampURL := webhook.GetStampURL(sm.Text, mapping)
 		if stampURL == "" {
 			fmt.Printf("No match stampURL")
 		} else {
-			webhook.RemoveEmoji(sm, conf.Slack.Token)
-			res, err := webhook.EncodeStamp(sm, conf.Slack.Token, stampURL)
+			webhook.RemoveEmoji(sm, api)
+			res, err := webhook.EncodeStamp(sm, api, stampURL)
 			if err != nil {
 				fmt.Println(err)
 			}

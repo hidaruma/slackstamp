@@ -72,8 +72,7 @@ func ParseSlackMessage(r *http.Request) (*SlackMessage, error) {
 	return &sm, nil
 }
 
-func RemoveEmoji(sm *SlackMessage, slackToken string) error {
-	api := slack.New(slackToken)
+func RemoveEmoji(sm *SlackMessage, api *slack.Client) error {
 	_, _, err  := api.DeleteMessage(sm.ChannelID, sm.TimeStamp)
 	if err != nil {
 		return err
@@ -81,7 +80,7 @@ func RemoveEmoji(sm *SlackMessage, slackToken string) error {
 	return nil
 }
 
-func EncodeStamp(sm *SlackMessage, slackToken string, stampURL string) ([]byte, error) {
+func EncodeStamp(sm *SlackMessage, api *slack.Client, stampURL string) ([]byte, error) {
 	stampURLDate := addDateString(stampURL)
 
 	var ats []slack.Attachment
@@ -90,7 +89,7 @@ func EncodeStamp(sm *SlackMessage, slackToken string, stampURL string) ([]byte, 
 		ImageURL: stampURLDate,
 	}
 	ats = append(ats, at)
-	iconURL, err := getUserIcon(sm.UserID, slackToken)
+	iconURL, err := getUserIcon(sm.UserID, api)
 	if err != nil {
 		return nil, err
 	}
@@ -121,8 +120,7 @@ func IsEmoji(emoji string) bool {
 	}
 }
 
-func getUserIcon(userID string, st string) (string, error) {
-	api := slack.New(st)
+func getUserIcon(userID string, api *slack.Client) (string, error) {
 	user, err := api.GetUserInfo(userID)
 	if err != nil {
 		return "", err
