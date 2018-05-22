@@ -82,7 +82,7 @@ func tokenFromVar(conf *oauth2.Config) (*oauth2.Token, error) {
 		AccessToken:tokJson.accessToken,
 		TokenType: tokJson.tokenType,
 		RefreshToken: tokJson.refreshToken,
-		Expiry: time.Unix(tokJson.expiry, 0),
+		Expiry: time.Now().Add(time.Duration(tokJson.expiry) * time.Second),
 	}
 	fmt.Println(tok)
 	return tok, err
