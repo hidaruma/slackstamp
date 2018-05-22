@@ -12,6 +12,8 @@ import (
 	"encoding/json"
 	"os"
 	"log"
+	"strings"
+	"time"
 )
 
 
@@ -58,7 +60,7 @@ func getTokenFromWeb(conf *oauth2.Config) *oauth2.Token {
 	if _, err := fmt.Scan(&authCode); err != nil {
 		os.Exit(1)
 		}
-	
+
 	tok, err := conf.Exchange(context.Background(), authCode)
 	if err != nil {
 fmt.Println("Unable to retrieve token from web")
@@ -67,8 +69,23 @@ fmt.Println("Unable to retrieve token from web")
 }
 
 func tokenFromVar(conf *oauth2.Config) (*oauth2.Token, error) {
-	authCode := os.Getenv("ACCESS_TOKEN")
-	tok, err := conf.Exchange(context.Background(), authCode)
+	tokenRaw := os.Getenv("ACCESS_TOKEN")
+
+	dec := json.NewDecoder(strings.NewReader(tokenRaw))
+	var tokJson struct{
+		accessToken string `json:"access_token"`
+		tokenType string `json:"token_type"`
+		refreshToken string `json:"refresh_token"`
+		expiry int64 `json:"expires_in"`
+	}
+	err := dec.Decode(&tokJson)
+	tok := &oauth2.Token{
+		AccessToken:tokJson.accessToken,
+		TokenType: tokJson.tokenType,
+		RefreshToken: tokJson.refreshToken,
+		Expiry: time.Unix(tokJson.expiry, 0),
+	}
+
 	return tok, err
 }
 
