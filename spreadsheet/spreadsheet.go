@@ -24,7 +24,6 @@ func getClient(secretJson string, tokFile string) (*http.Client, error) {
 	if err != nil {
 		b = []byte(secret)
 	}
-	fmt.Println(b)
 	conf, err := google.ConfigFromJSON(b, "https://www.googleapis.com/auth/spreadsheets.readonly")
 	if err != nil {
 		return nil, err
@@ -85,7 +84,7 @@ func tokenFromVar(conf *oauth2.Config) (*oauth2.Token, error) {
 		RefreshToken: tokJson.refreshToken,
 		Expiry: time.Unix(tokJson.expiry, 0),
 	}
-
+	fmt.Println(tok)
 	return tok, err
 }
 
