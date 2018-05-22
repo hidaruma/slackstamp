@@ -30,10 +30,14 @@ func getClient(secretJson string, tokFile string) (*http.Client, error) {
 	}
 	tok, err := tokenFromFile(tokFile)
 	if err != nil {
-		fmt.Println("--as-a-s-")
+		tok, err = tokenFromVar(conf)
+		if err != nil {
+
+		}
 		tok = getTokenFromWeb(conf)
 		saveToken(tokFile, tok)
-	}
+		}
+
 
 	return conf.Client(context.Background(), tok), nil
 }
@@ -53,18 +57,21 @@ func getTokenFromWeb(conf *oauth2.Config) *oauth2.Token {
 	authURL := conf.AuthCodeURL("state-token", oauth2.AccessTypeOffline)
 	fmt.Println("Go to the following link in your browser then type the auth code: %v\n", authURL)
 	var authCode string
-	authCode = os.Getenv("AUTHCODE")
-	if authCode == "" {
-
 		if _, err := fmt.Scan(&authCode); err != nil {
 			os.Exit(1)
 		}
 	}
 	tok, err := conf.Exchange(context.Background(), authCode)
 	if err != nil {
-		fmt.Println("Unable to retrieve token from web")
-	}
+fmt.Println("Unable to retrieve token from web")
+}
 	return tok
+}
+
+func tokenFromVar(conf *oauth2.Config) (*oauth2.Token, error) {
+	authCode := os.Getenv("ACCESS_TOKEN")
+	tok, err := conf.Exchange(context.Background(), authCode)
+	return tok, err
 }
 
 func tokenFromFile(file string) (*oauth2.Token, error) {
