@@ -109,6 +109,13 @@ func ParseSlackMessage(r *http.Request) (*SlackMessage, error) {
 	return &sm, nil
 }
 
+type removeJson struct {
+	ok bool `json:"ok"`
+	error string `json:"error,omitempty"`
+	channel string `json:"channel,omitempty"`
+	ts string `json:"ts,omitempty"`
+}
+
 func RemoveEmoji(sm *SlackMessage) error {
 	apiURL := slackAPI + "chat.delete"
 	vals := url.Values{}
@@ -132,8 +139,13 @@ func RemoveEmoji(sm *SlackMessage) error {
 	if err != nil {
 		return errors.New("remove message JSON parse Error\n")
 	}
-	rm := json.Unmarshal(rmJson)
-
+	rm := removeJson{}
+	if err = json.Unmarshal(rmJson, &rm); err != nil {
+		return err
+	}
+	if !rm.ok {
+		return errors.New(rm.error)
+	}
 	return nil
 }
 
