@@ -4,11 +4,12 @@ import (
 	"strconv"
 	"time"
 	"strings"
-	"github.com/nlopes/slack"
+	"net/url"
 	"fmt"
 	"errors"
 	"encoding/json"
 	"net/http"
+	"io/ioutil"
 )
 
 type SlackMessage struct {
@@ -24,6 +25,42 @@ type SlackMessage struct {
 	TriggerWord string `json:"trigger_word"`
 
 }
+
+type userProfile struct {
+	ok bool `json:"ok"`
+	profile profile `json:"profile,omitempty"`
+	error string `json:"error,omitempty"`
+}
+
+type profile struct {
+	title string `json:"title"`
+	phone string `json:"phone"`
+	skype string `json:"skype"`
+	realName string `json:"real_name"`
+	realNameNormalized string `json:"real_name_normalized"`
+	firstName string `json:"first_name,omitempty"`
+	lastName string `json:"last_name,omitempty"`
+	displayName string `json:"display_name"`
+	displayNameNormalized string `json:"display_name_normalized"`
+	fields map[string]interface{} `json:"fields,omitempty"`
+	statusText string `json:"status_text"`
+	statusEmoji string `json:"status_emoji"`
+	statusExpiration string `json:"status_expiration"`
+	avatarHash string `json:"avatar_hash"`
+	email string `json: "email"`
+	image24 string `json:"image_24"`
+	image32 string `json:"image_32"`
+	image48 string `json:"image_48"`
+	image72 string `json:"image_72"`
+	image192 string `json:"image_192"`
+	image512 string `json:"image_512"`
+	imageOriginal string `json:"image_original,omitempty"`
+	statusTextCanonical string `json:"status_text_canonical"`
+	team string `json:"team,omitempty"`
+}
+
+
+const slackAPI = "https://slack.com/api/"
 
 func ParseSlackMessage(r *http.Request) (*SlackMessage, error) {
 	r.ParseForm()
@@ -72,34 +109,81 @@ func ParseSlackMessage(r *http.Request) (*SlackMessage, error) {
 	return &sm, nil
 }
 
-func RemoveEmoji(sm *SlackMessage, api *slack.Client) error {
-	_, _, err  := api.DeleteMessage(sm.ChannelID, sm.TimeStamp)
+func RemoveEmoji(sm *SlackMessage) error {
+	apiURL := slackAPI + "chat.delete"
+	vals := url.Values{}
+	vals.Set("token", sm.Token)
+	vals.Add("channel", sm.ChannelID)
+	vals.Add("ts", sm.TimeStamp)
+	vals.Add("as_user", "true")
+
+	req, err := http.NewRequest("POST", apiURL, strings.NewReader(vals.Encode()))
 	if err != nil {
 		return err
 	}
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	client := new(http.Client)
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	rmJson, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return errors.New("remove message JSON parse Error\n")
+	}
+	rm := json.Unmarshal(rmJson)
+
 	return nil
 }
 
-func EncodeStamp(sm *SlackMessage, api *slack.Client, stampURL string) ([]byte, error) {
+type postMessageParameters struct {
+	channel string `json:"channel"`
+	userName string `json:"user_name"`
+	iconURL string `json:"icon_url"`
+	attachments []attachment `json:"attachments"`
+	asUser bool `json:"as_user"`
+	user string `json:"user"`
+}
+
+type attachment struct {
+	fallback string `json:"fallback"`
+	color string `json:"color"`
+	authorName string `json:"author_name"`
+	authorLink string `json:"author_link"`
+	authorIcon string `json:"author_icon"`
+	title string `json:"title"`
+	titleLink string `json:"title_link"`
+	fields map[string]interface{} `json:"fields,omitempty"`
+
+	text string `json:"text"`
+	imageURL string `json:"image_url"`
+	thumbURL string `json:"thumb_url"`
+	footer string `json:"footer"`
+	footerIcon string `json:"footer_icon"`
+	ts float64 `json:"ts"`
+}
+
+func EncodeStamp(sm *SlackMessage, st string, stampURL string) ([]byte, error) {
 	stampURLDate := addDateString(stampURL)
 
-	var ats []slack.Attachment
-	at := slack.Attachment{
-		Text: "",
-		ImageURL: stampURLDate,
+	var ats []attachment
+	at := attachment{
+		text: "",
+		imageURL: stampURLDate,
 	}
 	ats = append(ats, at)
-	iconURL, err := getUserIcon(sm.UserID, api)
+	iconURL, err := getUserIcon(sm.UserID, st)
 	if err != nil {
 		return nil, err
 	}
-	pmp := slack.PostMessageParameters{
-	Channel: sm.ChannelID,
-	Username: sm.UserName,
-	IconURL: iconURL,
-	Attachments: ats,
-	AsUser: true,
-	User: sm.UserID,
+	pmp := postMessageParameters{
+	channel: sm.ChannelID,
+	userName: sm.UserName,
+	iconURL: iconURL,
+	attachments: ats,
+	asUser: true,
+	user: sm.UserID,
 	}
 
 	res, err := json.Marshal(pmp)
@@ -120,12 +204,29 @@ func IsEmoji(emoji string) bool {
 	}
 }
 
-func getUserIcon(userID string, api *slack.Client) (string, error) {
-	user, err := api.GetUserInfo(userID)
+func getUserIcon(userID string, st string) (string, error) {
+	apiURL := slackAPI +  "users.profile.get"
+	vals := url.Values{}
+	vals.Set("token", st)
+	vals.Add("user_id", userID)
+	req, err := http.NewRequest("GET", apiURL, strings.NewReader(vals.Encode()))
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
 	if err != nil {
 		return "", err
 	}
-	iconURL := user.Profile.Image72
+	client := new(http.Client)
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+	userJson, err := ioutil.ReadAll(resp.Body)
+	var up userProfile
+	if err := json.Unmarshal(userJson, &up); err != nil {
+		return "", err
+	}
+	iconURL := up.profile.image72
 	return iconURL, nil
 }
 
