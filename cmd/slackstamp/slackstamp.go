@@ -36,14 +36,14 @@ func main() {
 		}
 		t.Stop()
 	}()
-	mapping := map[string]string{}
+	emojiURL := map[string]string{}
 	select {
 	case sheet := <- sheetChan:
 		mapping, err := spreadsheet.SetMapping(sheet, conf.SpreadSheet.ID, conf.SpreadSheet.Name)
 		if err != nil {
 			fmt.Println("Invalid Sheet Schema or etc.")
 		}
-		
+		emojiURL = mapping
 	case err := <- errChan:
 		fmt.Println(err)
 		os.Exit(1)
@@ -57,7 +57,7 @@ func main() {
 				}
 	
 				if webhook.IsEmoji(sm.Text) {
-					stampURL := webhook.GetStampURL(sm.Text, mapping)
+					stampURL := webhook.GetStampURL(sm.Text, emojiURL)
 					if stampURL == "" {
 						fmt.Printf("No match stampURL")
 					} else {
