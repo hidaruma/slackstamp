@@ -209,7 +209,8 @@ func EncodeStamp(sm *SlackMessage, st string, stampURL string) ([]byte, error) {
 
 
 func IsEmoji(emoji string) bool {
-	if []rune(emoji)[0] == ':' && []rune(emoji)[len(emoji)-1] == ':' {
+	emojiRune := []rune(emoji)
+	if emojiRune[0] == ':' && emojiRune[len(emojiRune)-1] == ':' {
 		return true
 	} else {
 		return false
