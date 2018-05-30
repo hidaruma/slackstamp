@@ -20,6 +20,7 @@ type SlackConfig struct {
 
 type ServerConfig struct {
 	Port string `toml:"port"`
+	Addr string `toml:"addr"`
 	EndPoint string `toml:"endpoint"`
 }
 
@@ -44,6 +45,7 @@ func LoadToml(fp string) (*Config, error) {
 				ServerConfig{
 					Port: fmt.Sprintf(":%s", port),
 					EndPoint: os.Getenv("ENDPOINT"),
+					Addr: os.Getenv("ADDR")
 				},
 				SpreadSheetConfig{
 					Secret: os.Getenv("CLIENT_JSON"),
