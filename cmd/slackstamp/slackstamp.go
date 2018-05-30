@@ -78,7 +78,7 @@ func main() {
 		port = fmt.Sprintf(":%s", port)
 	}
 	
-	err = http.ListenAndServe(conf.Server.Addr + port, nil)
+	err = http.ListenAndServe(port, nil)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
