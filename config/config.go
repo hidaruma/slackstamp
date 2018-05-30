@@ -40,7 +40,7 @@ func LoadToml(fp string) (*Config, error) {
 				Token: os.Getenv("SLACK_TOKEN"),
 				},
 				ServerConfig{
-					Port: os.Getenv("PORT"),
+					Port: ":" + os.Getenv("PORT"),
 					EndPoint: os.Getenv("ENDPOINT"),
 				},
 				SpreadSheetConfig{
