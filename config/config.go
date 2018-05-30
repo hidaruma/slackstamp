@@ -31,6 +31,7 @@ type SpreadSheetConfig struct {
 
 func LoadToml(fp string) (*Config, error) {
 	var conf Config
+	port := map[bool]string{true: os.Getenv("PORT"), false: "8080"}[os.Getenv("PORT") != ""]
 	f := filepath.ToSlash(fp)
 	tf, err := os.Open(f)
 	defer tf.Close()
@@ -40,7 +41,7 @@ func LoadToml(fp string) (*Config, error) {
 				Token: os.Getenv("SLACK_TOKEN"),
 				},
 				ServerConfig{
-					Port: ":" + os.Getenv("PORT"),
+					Port: fmt.Sprintf(":%s", port),
 					EndPoint: os.Getenv("ENDPOINT"),
 				},
 				SpreadSheetConfig{
