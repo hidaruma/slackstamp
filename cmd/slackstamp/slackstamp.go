@@ -13,7 +13,8 @@ import (
 )
 
 func main() {
-	port := flag.String("port", "", "Port for Heroku")
+	p := flag.String("port", "", "Port for Heroku")
+	port := *p
 	conf, err := config.LoadToml("conf.toml")
 	if err != nil {
 		fmt.Println("No config")
@@ -71,13 +72,13 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	if *port == "" {
-		*port = conf.Server.Port
+	if port == "" {
+		port = conf.Server.Port
 	} else {
-		*port = fmt.Sprintf(":%s", port)
+		port = fmt.Sprintf(":%s", port)
 	}
 	
-	err = http.ListenAndServe(conf.Server.Addr + *port, nil)
+	err = http.ListenAndServe(conf.Server.Addr + port, nil)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
