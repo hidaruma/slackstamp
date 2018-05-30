@@ -37,18 +37,19 @@ func main() {
 		t.Stop()
 	}()
 	emojiURL := map[string]string{}
-	select {
-	case sheet := <- sheetChan:
-		mapping, err := spreadsheet.SetMapping(sheet, conf.SpreadSheet.ID, conf.SpreadSheet.Name)
-		if err != nil {
-			fmt.Println("Invalid Sheet Schema or etc.")
+    go func(){
+		select {
+		case sheet := <- sheetChan:
+			mapping, err := spreadsheet.SetMapping(sheet, conf.SpreadSheet.ID, conf.SpreadSheet.Name)
+			if err != nil {
+				fmt.Println("Invalid Sheet Schema or etc.")
+			}
+			emojiURL = mapping
+		case err := <- errChan:
+			fmt.Println(err)
+			os.Exit(1)
 		}
-		emojiURL = mapping
-	case err := <- errChan:
-		fmt.Println(err)
-		os.Exit(1)
-	}
-	
+	}()
 	http.HandleFunc(conf.Server.EndPoint, func(w http.ResponseWriter, r *http.Request) {
 				w.Header().Set("Content-Type", "application/json")
 				sm, err := webhook.ParseSlackMessage(r)
