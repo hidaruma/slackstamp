@@ -4,6 +4,7 @@ import (
 	"github.com/naoina/toml"
 	"path/filepath"
 	"os"
+	"fmt"
 )
 
 type Config struct {
