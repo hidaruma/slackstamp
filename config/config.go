@@ -43,7 +43,7 @@ func LoadToml(fp string) (*Config, error) {
 				Token: os.Getenv("SLACK_TOKEN"),
 				},
 				ServerConfig{
-					Port: fmt.Sprintf(":%s", port),
+					Port: port,
 					EndPoint: os.Getenv("ENDPOINT"),
 					Addr: os.Getenv("ADDR"),
 				},
@@ -57,5 +57,6 @@ func LoadToml(fp string) (*Config, error) {
 	} else if err := toml.NewDecoder(tf).Decode(&conf); err != nil {
 		return nil, err
 	}
+	conf.Server.Port = fmt.Sprintf(":%s", conf.Server.Port)
 	return &conf, nil
 }
