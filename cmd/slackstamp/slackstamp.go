@@ -64,7 +64,7 @@ func main() {
 					if stampURL == "" {
 						fmt.Println("No match stampURL")
 					} else {
-						webhook.RemoveEmoji(sm)
+						webhook.RemoveEmoji(sm, conf.Slack.Token)
 						res, err := webhook.EncodeStamp(sm, conf.Slack.Token, stampURL)
 						if err != nil {
 							fmt.Printf("EncodeStampError:%v\n", err)
