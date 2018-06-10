@@ -67,7 +67,7 @@ const slackAPI = "https://slack.com/api/"
 func ParseSlackMessage(r *http.Request) (*SlackMessage, error) {
 	r.ParseForm()
 	var token, teamID, teamDomain, channelID, channelName, timeStamp, userID, userName, text, triggerWord, serviceID string
-	fmt.Printf("%#v", r.Form)
+	fmt.Printf("%#v\n", r.Form)
 	for key, val := range r.Form {
 		switch key {
 		case "token":
@@ -110,7 +110,7 @@ func ParseSlackMessage(r *http.Request) (*SlackMessage, error) {
 		TriggerWord: triggerWord,
 		ServiceID: serviceID,
 	}
-	
+
 	return &sm, nil
 }
 
@@ -148,6 +148,7 @@ func RemoveEmoji(sm *SlackMessage) error {
 	}
 	rm := removeJson{}
 	if err = json.Unmarshal(rmJson, &rm); err != nil {
+		fmt.Println("Json Unmarshal Error")
 		return err
 	}
 	if !rm.ok {
