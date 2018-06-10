@@ -110,8 +110,7 @@ func ParseSlackMessage(r *http.Request) (*SlackMessage, error) {
 		TriggerWord: triggerWord,
 		ServiceID: serviceID,
 	}
-
-	fmt.Print(sm)
+	
 	return &sm, nil
 }
 
