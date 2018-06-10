@@ -197,7 +197,6 @@ func EncodeStamp(sm *SlackMessage, st string, stampURL string) ([]byte, error) {
 
 	var ats []Attachment
 	at := Attachment{
-		Text: " ",
 		ImageURL: stampURLDate,
 		ThumbURL: stampURLDate,
 		Fallback: "Post Stamp",
@@ -210,7 +209,7 @@ func EncodeStamp(sm *SlackMessage, st string, stampURL string) ([]byte, error) {
 	}
 	pmp := PostMessageParameters{
 	//Channel: sm.ChannelID,
-	Text: "",
+	Text: " ",
 	UserName: sm.UserName,
 	IconURL: iconURL,
 	Attachments: ats,
