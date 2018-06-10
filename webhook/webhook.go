@@ -160,7 +160,7 @@ func RemoveEmoji(sm *SlackMessage, st string) error {
 
 type PostMessageParameters struct {
 	//Channel string `json:"channel"`
-	UserName string `json:"user_name"`
+	UserName string `json:"username"`
 	IconURL string `json:"icon_url"`
 	Text string `json:"text"`
 	Attachments []Attachment `json:"attachments"`
