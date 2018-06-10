@@ -28,37 +28,37 @@ type SlackMessage struct {
 
 }
 
-type userProfile struct {
-	ok bool `json:"ok"`
-	profile profile `json:"profile,omitempty"`
-	error string `json:"error,omitempty"`
+type UserProfile struct {
+	Ok bool `json:"ok"`
+	Profile Profile `json:"profile,omitempty"`
+	Error string `json:"error,omitempty"`
 }
 
-type profile struct {
-	title string `json:"title"`
-	phone string `json:"phone"`
-	skype string `json:"skype"`
-	realName string `json:"real_name"`
-	realNameNormalized string `json:"real_name_normalized"`
-	firstName string `json:"first_name,omitempty"`
-	lastName string `json:"last_name,omitempty"`
-	displayName string `json:"display_name"`
-	displayNameNormalized string `json:"display_name_normalized"`
-	fields map[string]interface{} `json:"fields,omitempty"`
-	statusText string `json:"status_text"`
-	statusEmoji string `json:"status_emoji"`
-	statusExpiration string `json:"status_expiration"`
-	avatarHash string `json:"avatar_hash"`
-	email string `json: "email"`
-	image24 string `json:"image_24"`
-	image32 string `json:"image_32"`
-	image48 string `json:"image_48"`
-	image72 string `json:"image_72"`
-	image192 string `json:"image_192"`
-	image512 string `json:"image_512"`
-	imageOriginal string `json:"image_original,omitempty"`
-	statusTextCanonical string `json:"status_text_canonical"`
-	team string `json:"team,omitempty"`
+type Profile struct {
+	Title string `json:"title"`
+	Phone string `json:"phone"`
+	Skype string `json:"skype"`
+	RealName string `json:"real_name"`
+	RealNameNormalized string `json:"real_name_normalized"`
+	FirstName string `json:"first_name,omitempty"`
+	LastName string `json:"last_name,omitempty"`
+	DisplayName string `json:"display_name"`
+	DisplayNameNormalized string `json:"display_name_normalized"`
+	Fields []Field `json:"fields,omitempty"`
+	StatusText string `json:"status_text"`
+	StatusEmoji string `json:"status_emoji"`
+	StatusExpiration string `json:"status_expiration"`
+	AvatarHash string `json:"avatar_hash"`
+	Email string `json: "email"`
+	Image24 string `json:"image_24"`
+	Image32 string `json:"image_32"`
+	Image48 string `json:"image_48"`
+	Image72 string `json:"image_72"`
+	Image192 string `json:"image_192"`
+	Image512 string `json:"image_512"`
+	ImageOriginal string `json:"image_original,omitempty"`
+	StatusTextCanonical string `json:"status_text_canonical"`
+	Team string `json:"team,omitempty"`
 }
 
 
@@ -114,11 +114,11 @@ func ParseSlackMessage(r *http.Request) (*SlackMessage, error) {
 	return &sm, nil
 }
 
-type removeJson struct {
-	ok bool `json:"ok"`
-	error string `json:"error,omitempty"`
-	channel string `json:"channel,omitempty"`
-	ts string `json:"ts,omitempty"`
+type RemoveJson struct {
+	Ok bool `json:"ok"`
+	Error string `json:"error,omitempty"`
+	Channel string `json:"channel,omitempty"`
+	Ts string `json:"ts,omitempty"`
 }
 
 
@@ -146,57 +146,57 @@ func RemoveEmoji(sm *SlackMessage) error {
 	if err != nil {
 		return errors.New("remove message JSON parse Error\n")
 	}
-	rm := removeJson{}
+	rm := RemoveJson{}
 	if err = json.Unmarshal(rmJson, &rm); err != nil {
 		fmt.Println("Json Unmarshal Error")
 		return err
 	}
-	if !rm.ok {
-		return errors.New(rm.error)
+	if !rm.Ok {
+		return errors.New(rm.Error)
 	}
 	return nil
 }
 
-type postMessageParameters struct {
-	channel string `json:"channel"`
-	userName string `json:"user_name"`
-	iconURL string `json:"icon_url"`
-	attachments []attachment `json:"attachments"`
-	asUser bool `json:"as_user"`
-	user string `json:"user"`
+type PostMessageParameters struct {
+	Channel string `json:"channel"`
+	UserName string `json:"user_name"`
+	IconURL string `json:"icon_url"`
+	Attachments []Attachment `json:"attachments"`
+	AsUser bool `json:"as_user"`
+	User string `json:"user"`
 }
 
-type attachment struct {
-	fallback string `json:"fallback,omitempty"`
-	color string `json:"color,omitempty"`
-	authorName string `json:"author_name,omitempty"`
-	authorLink string `json:"author_link,omitempty"`
-	authorIcon string `json:"author_icon,omitempty"`
-	title string `json:"title,omitempty"`
-	titleLink string `json:"title_link,omitempty"`
-	fields []field `json:"fields,omitempty"`
-	pretext string `json:"pretext,omitempty"`
-	text string `json:"text,omitempty"`
-	imageURL string `json:"image_url,omitempty"`
-	thumbURL string `json:"thumb_url,omitempty"`
-	footer string `json:"footer,omitempty"`
-	footerIcon string `json:"footer_icon,omitempty"`
-	ts float64 `json:"ts,omitempty"`
+type Attachment struct {
+	Fallback string `json:"fallback,omitempty"`
+	Color string `json:"color,omitempty"`
+	AuthorName string `json:"author_name,omitempty"`
+	AuthorLink string `json:"author_link,omitempty"`
+	AuthorIcon string `json:"author_icon,omitempty"`
+	Title string `json:"title,omitempty"`
+	TitleLink string `json:"title_link,omitempty"`
+	Fields []Field `json:"fields,omitempty"`
+	Pretext string `json:"pretext,omitempty"`
+	Text string `json:"text,omitempty"`
+	ImageURL string `json:"image_url,omitempty"`
+	ThumbURL string `json:"thumb_url,omitempty"`
+	Footer string `json:"footer,omitempty"`
+	FooterIcon string `json:"footer_icon,omitempty"`
+	Ts float64 `json:"ts,omitempty"`
 }
 
-type field struct {
-	title string `json:"title,omitempty"`
-	value string `json:"value,omitempty"`
-	short bool `json:"short,omitempty"`
+type Field struct {
+	Title string `json:"title,omitempty"`
+	Value string `json:"value,omitempty"`
+	Short bool `json:"short,omitempty"`
 }
 
 func EncodeStamp(sm *SlackMessage, st string, stampURL string) ([]byte, error) {
 	stampURLDate := addDateString(stampURL)
 
-	var ats []attachment
-	at := attachment{
-		text: "",
-		imageURL: stampURLDate,
+	var ats []Attachment
+	at := Attachment{
+		Text: "",
+		ImageURL: stampURLDate,
 	}
 	ats = append(ats, at)
 	iconURL, err := getUserIcon(sm.UserID, st)
@@ -204,13 +204,13 @@ func EncodeStamp(sm *SlackMessage, st string, stampURL string) ([]byte, error) {
 		fmt.Println("Error get user icon")
 		return nil, err
 	}
-	pmp := postMessageParameters{
-	channel: sm.ChannelID,
-	userName: sm.UserName,
-	iconURL: iconURL,
-	attachments: ats,
-	asUser: true,
-	user: sm.UserID,
+	pmp := PostMessageParameters{
+	Channel: sm.ChannelID,
+	UserName: sm.UserName,
+	IconURL: iconURL,
+	Attachments: ats,
+	AsUser: true,
+	User: sm.UserID,
 	}
 	fmt.Printf("%#v\n", pmp)
 	res, err := json.Marshal(pmp)
@@ -251,12 +251,12 @@ func getUserIcon(userID string, st string) (string, error) {
 	}
 	defer resp.Body.Close()
 	userJson, err := ioutil.ReadAll(resp.Body)
-	var up userProfile
+	var up UserProfile
 	fmt.Println(string(userJson))
 	if err := json.Unmarshal(userJson, &up); err != nil {
 		return "", err
 	}
-	iconURL := up.profile.image72
+	iconURL := up.Profile.Image72
 	return iconURL, nil
 }
 
