@@ -174,7 +174,7 @@ type attachment struct {
 	authorIcon string `json:"author_icon,omitempty"`
 	title string `json:"title,omitempty"`
 	titleLink string `json:"title_link,omitempty"`
-	fields map[string]interface{} `json:"fields,omitempty"`
+	fields []field `json:"fields,omitempty"`
 	pretext string `json:"pretext,omitempty"`
 	text string `json:"text,omitempty"`
 	imageURL string `json:"image_url,omitempty"`
@@ -182,6 +182,12 @@ type attachment struct {
 	footer string `json:"footer,omitempty"`
 	footerIcon string `json:"footer_icon,omitempty"`
 	ts float64 `json:"ts,omitempty"`
+}
+
+type field struct {
+	title string `json:"title,omitempty"`
+	value string `json:"value,omitempty"`
+	short bool `json:"short,omitempty"`
 }
 
 func EncodeStamp(sm *SlackMessage, st string, stampURL string) ([]byte, error) {
