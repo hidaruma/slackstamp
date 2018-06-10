@@ -230,7 +230,7 @@ func getUserIcon(userID string, st string) (string, error) {
 	apiURL := slackAPI +  "users.profile.get"
 	vals := url.Values{}
 	vals.Set("token", st)
-	vals.Add("user_id", userID)
+	vals.Add("user", userID)
 	req, err := http.NewRequest("GET", apiURL, strings.NewReader(vals.Encode()))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
