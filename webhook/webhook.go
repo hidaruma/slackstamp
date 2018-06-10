@@ -231,12 +231,13 @@ func getUserIcon(userID string, st string) (string, error) {
 	vals := url.Values{}
 	vals.Set("token", st)
 	vals.Add("user", userID)
-	req, err := http.NewRequest("GET", apiURL, strings.NewReader(vals.Encode()))
+	req, err := http.NewRequest("GET", apiURL, nil)
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 	if err != nil {
 		return "", err
 	}
+	req.URL.RawQuery = vals.Encode()
 	client := new(http.Client)
 	resp, err := client.Do(req)
 	if err != nil {
