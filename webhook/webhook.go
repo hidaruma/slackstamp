@@ -24,6 +24,8 @@ type SlackMessage struct {
 	Text string `json:"text"`
 	TriggerWord string `json:"trigger_word"`
 
+	ServiceID string `json:"service_id"`
+
 }
 
 type userProfile struct {
@@ -64,7 +66,7 @@ const slackAPI = "https://slack.com/api/"
 
 func ParseSlackMessage(r *http.Request) (*SlackMessage, error) {
 	r.ParseForm()
-	var token, teamID, teamDomain, channelID, channelName, timeStamp, userID, userName, text, triggerWord string
+	var token, teamID, teamDomain, channelID, channelName, timeStamp, userID, userName, text, triggerWord, serviceID string
 	fmt.Printf("%#v", r.Form)
 	for key, val := range r.Form {
 		switch key {
@@ -88,6 +90,8 @@ func ParseSlackMessage(r *http.Request) (*SlackMessage, error) {
 			text = val[0]
 		case "trigger_word":
 			triggerWord = val[0]
+		case "service_id":
+			serviceID = val[0]
 		default:
 			return nil, errors.New("Invalid request\n")
 		}
@@ -104,6 +108,7 @@ func ParseSlackMessage(r *http.Request) (*SlackMessage, error) {
 		UserName: userName,
 		Text: text,
 		TriggerWord: triggerWord,
+		ServiceID: serviceID,
 	}
 
 	fmt.Print(sm)
