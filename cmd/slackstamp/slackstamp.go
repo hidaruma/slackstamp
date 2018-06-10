@@ -51,7 +51,8 @@ func main() {
 		}
 	}()
 	http.HandleFunc(conf.Server.EndPoint, func(w http.ResponseWriter, r *http.Request) {
-				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(200)
+				w.Header().Set("Content-Type", "application/json; charset=utf-8")
 				sm, err := webhook.ParseSlackMessage(r)
 				if err != nil {
 					fmt.Println(err)
@@ -69,6 +70,7 @@ func main() {
 							fmt.Printf("EncodeStampError:%v\n", err)
 						}
 						w.Write(res)
+						fmt.Println("Written")
 					}
 	
 				}
