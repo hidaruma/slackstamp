@@ -158,9 +158,10 @@ func RemoveEmoji(sm *SlackMessage) error {
 }
 
 type PostMessageParameters struct {
-	Channel string `json:"channel"`
+	//Channel string `json:"channel"`
 	UserName string `json:"user_name"`
 	IconURL string `json:"icon_url"`
+	Text string `json:"text"`
 	Attachments []Attachment `json:"attachments"`
 	AsUser bool `json:"as_user"`
 	User string `json:"user"`
@@ -205,7 +206,8 @@ func EncodeStamp(sm *SlackMessage, st string, stampURL string) ([]byte, error) {
 		return nil, err
 	}
 	pmp := PostMessageParameters{
-	Channel: sm.ChannelID,
+	//Channel: sm.ChannelID,
+	Text: "",
 	UserName: sm.UserName,
 	IconURL: iconURL,
 	Attachments: ats,
