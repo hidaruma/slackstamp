@@ -167,21 +167,21 @@ type postMessageParameters struct {
 }
 
 type attachment struct {
-	fallback string `json:"fallback"`
-	color string `json:"color"`
-	authorName string `json:"author_name"`
-	authorLink string `json:"author_link"`
-	authorIcon string `json:"author_icon"`
-	title string `json:"title"`
-	titleLink string `json:"title_link"`
+	fallback string `json:"fallback,omitempty"`
+	color string `json:"color,omitempty"`
+	authorName string `json:"author_name,omitempty"`
+	authorLink string `json:"author_link,omitempty"`
+	authorIcon string `json:"author_icon,omitempty"`
+	title string `json:"title,omitempty"`
+	titleLink string `json:"title_link,omitempty"`
 	fields map[string]interface{} `json:"fields,omitempty"`
-
-	text string `json:"text"`
-	imageURL string `json:"image_url"`
-	thumbURL string `json:"thumb_url"`
-	footer string `json:"footer"`
-	footerIcon string `json:"footer_icon"`
-	ts float64 `json:"ts"`
+	pretext string `json:"pretext,omitempty"`
+	text string `json:"text,omitempty"`
+	imageURL string `json:"image_url,omitempty"`
+	thumbURL string `json:"thumb_url,omitempty"`
+	footer string `json:"footer,omitempty"`
+	footerIcon string `json:"footer_icon,omitempty"`
+	ts float64 `json:"ts,omitempty"`
 }
 
 func EncodeStamp(sm *SlackMessage, st string, stampURL string) ([]byte, error) {
@@ -207,7 +207,7 @@ func EncodeStamp(sm *SlackMessage, st string, stampURL string) ([]byte, error) {
 	user: sm.UserID,
 	}
 
-	res, err := json.Marshal(pmp)
+	res, err := json.Marshal(&pmp)
 	if err != nil {
 		return nil, err
 	}
