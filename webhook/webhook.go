@@ -224,6 +224,7 @@ func EncodeStamp(sm *SlackMessage, st string, stampURL string) ([]byte, error) {
 	}
 	fmt.Println(string(res))
 	fmt.Println("Encode Message Successfully")
+	res = []byte(`{"text": "Ummn"}`)
 	return res, nil
 }
 
