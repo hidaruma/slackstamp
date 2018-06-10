@@ -65,6 +65,7 @@ const slackAPI = "https://slack.com/api/"
 func ParseSlackMessage(r *http.Request) (*SlackMessage, error) {
 	r.ParseForm()
 	var token, teamID, teamDomain, channelID, channelName, timeStamp, userID, userName, text, triggerWord string
+	fmt.Printf("%#v", r.Form)
 	for key, val := range r.Form {
 		switch key {
 		case "token":
@@ -116,6 +117,7 @@ type removeJson struct {
 	ts string `json:"ts,omitempty"`
 }
 
+
 func RemoveEmoji(sm *SlackMessage) error {
 	apiURL := slackAPI + "chat.delete"
 	vals := url.Values{}
@@ -126,6 +128,7 @@ func RemoveEmoji(sm *SlackMessage) error {
 
 	req, err := http.NewRequest("POST", apiURL, strings.NewReader(vals.Encode()))
 	if err != nil {
+		fmt.Println("Remove Emoji Err")
 		return err
 	}
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
@@ -210,11 +213,11 @@ func EncodeStamp(sm *SlackMessage, st string, stampURL string) ([]byte, error) {
 
 func IsEmoji(emoji string) bool {
 	emojiRune := []rune(emoji)
-	if emojiRune[0] == ':' && emojiRune[len(emojiRune)-1] == ':' {
+	if emojiRune[0] == ':' && ( emojiRune[len(emoji)-1] == ':' || (emojiRune[len(emoji) -1] == '\n' && emojiRune[len(emoji) -2] == ':' )){
 		return true
-	} else {
-		return false
-	}
+	} 
+	return false
+
 }
 
 func getUserIcon(userID string, st string) (string, error) {
