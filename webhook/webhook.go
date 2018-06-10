@@ -195,6 +195,7 @@ func EncodeStamp(sm *SlackMessage, st string, stampURL string) ([]byte, error) {
 	ats = append(ats, at)
 	iconURL, err := getUserIcon(sm.UserID, st)
 	if err != nil {
+		fmt.Println("Error get user icon")
 		return nil, err
 	}
 	pmp := postMessageParameters{
