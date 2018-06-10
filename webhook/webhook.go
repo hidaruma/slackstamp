@@ -164,8 +164,8 @@ type PostMessageParameters struct {
 	IconURL string `json:"icon_url"`
 	Text string `json:"text"`
 	Attachments []Attachment `json:"attachments"`
-	AsUser bool `json:"as_user"`
-	User string `json:"user"`
+//	AsUser bool `json:"as_user"`
+//	User string `json:"user"`
 }
 
 type Attachment struct {
@@ -212,8 +212,8 @@ func EncodeStamp(sm *SlackMessage, st string, stampURL string) ([]byte, error) {
 	UserName: sm.UserName,
 	IconURL: iconURL,
 	Attachments: ats,
-	AsUser: true,
-	User: sm.UserID,
+//	AsUser: true,
+//	User: sm.UserID,
 	}
 	fmt.Printf("%#v\n", pmp)
 	res, err := json.Marshal(pmp)
