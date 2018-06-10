@@ -206,8 +206,8 @@ func EncodeStamp(sm *SlackMessage, st string, stampURL string) ([]byte, error) {
 	asUser: true,
 	user: sm.UserID,
 	}
-
-	res, err := json.Marshal(&pmp)
+	fmt.Printf("%#v\n", pmp)
+	res, err := json.Marshal(pmp)
 	if err != nil {
 		return nil, err
 	}
