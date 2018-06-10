@@ -122,20 +122,21 @@ type RemoveJson struct {
 }
 
 
-func RemoveEmoji(sm *SlackMessage) error {
+func RemoveEmoji(sm *SlackMessage, st string) error {
 	apiURL := slackAPI + "chat.delete"
 	vals := url.Values{}
-	vals.Set("token", sm.Token)
+	vals.Set("token", st)
 	vals.Add("channel", sm.ChannelID)
 	vals.Add("ts", sm.TimeStamp)
 	vals.Add("as_user", "true")
 
-	req, err := http.NewRequest("POST", apiURL, strings.NewReader(vals.Encode()))
+	req, err := http.NewRequest("POST", apiURL, nil)
 	if err != nil {
 		fmt.Println("Remove Emoji Err")
 		return err
 	}
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.URL.RawQuery = vals.Encode()
 	client := new(http.Client)
 	resp, err := client.Do(req)
 	if err != nil {
