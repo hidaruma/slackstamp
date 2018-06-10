@@ -245,6 +245,7 @@ func getUserIcon(userID string, st string) (string, error) {
 	defer resp.Body.Close()
 	userJson, err := ioutil.ReadAll(resp.Body)
 	var up userProfile
+	fmt.Println(string(userJson))
 	if err := json.Unmarshal(userJson, &up); err != nil {
 		return "", err
 	}
