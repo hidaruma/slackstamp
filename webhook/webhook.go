@@ -47,7 +47,7 @@ type Profile struct {
 	Fields []Field `json:"fields,omitempty"`
 	StatusText string `json:"status_text"`
 	StatusEmoji string `json:"status_emoji"`
-	StatusExpiration string `json:"status_expiration"`
+	StatusExpiration  int `json:"status_expiration"`
 	AvatarHash string `json:"avatar_hash"`
 	Email string `json: "email"`
 	Image24 string `json:"image_24"`
