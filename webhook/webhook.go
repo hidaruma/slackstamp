@@ -199,6 +199,8 @@ func EncodeStamp(sm *SlackMessage, st string, stampURL string) ([]byte, error) {
 	at := Attachment{
 		Text: "",
 		ImageURL: stampURLDate,
+		ThumbURL: stampURLDate,
+		Fallback: "Post Stamp",
 	}
 	ats = append(ats, at)
 	iconURL, err := getUserIcon(sm.UserID, st)

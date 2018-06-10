@@ -69,8 +69,9 @@ func main() {
 						if err != nil {
 							fmt.Printf("EncodeStampError:%v\n", err)
 						}
-						w.Write(res)
-						fmt.Println("Written")
+						fmt.Fprint(w,
+							res)
+						fmt.Printf("Written:%v", res)
 					}
 	
 				}
