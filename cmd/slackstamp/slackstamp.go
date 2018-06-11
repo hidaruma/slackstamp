@@ -7,28 +7,44 @@ import (
 	"fmt"
 	"github.com/hidaruma/slackstamp/config"
 	"os"
-	"google.golang.org/api/sheets/v4"
 	"time"
 	"flag"
+	"context"
 )
 
 func main() {
+	ctx := context.Background()
 	p := flag.String("port", "", "Port for Heroku")
 	port := *p
 	conf, err := config.LoadToml("conf.toml")
 	if err != nil {
 		fmt.Println("No config")
 	}
-	sheetChan := make(chan *sheets.SpreadsheetsService, 1)
-	errChan := make(chan error, 1)
 
+	sconf, err := spreadsheet.GetConfig(conf.SpreadSheet.Secret)
+	if err != nil {
+		fmt.Println("Can't get oauth2 client")
+		os.Exit(1)
+	}
+	client, err := spreadsheet.GetClient(ctx, sconf, conf.SpreadSheet.Token)
+	if err != nil {
+		fmt.Println("Can't get http.client")
+		os.Exit(1)
+	}
+	srv, err := spreadsheet.GetSheet(client)
+	if err != nil {
+		fmt.Println("Can't get sheet")
+		os.Exit(1)
+	}
+	errChan := make(chan error, 1)
+	emojiURL := map[string]string{}
 	go func() {
 		t := time.NewTicker(5 * time.Minute)
 		for {
 			select{
 			case <-t.C:
-				sheet, err := spreadsheet.GetSheet(conf.SpreadSheet.Secret, conf.SpreadSheet.Token)
-				sheetChan <- sheet
+				mapping, err := spreadsheet.SetMapping(srv, conf.SpreadSheet.ID, conf.SpreadSheet.Name)
+				emojiURL = mapping
 				if err != nil{
 				errChan <- err
 				}
@@ -36,20 +52,7 @@ func main() {
 		}
 		t.Stop()
 	}()
-	emojiURL := map[string]string{}
-    go func(){
-		select {
-		case sheet := <- sheetChan:
-			mapping, err := spreadsheet.SetMapping(sheet, conf.SpreadSheet.ID, conf.SpreadSheet.Name)
-			if err != nil {
-				fmt.Println("Invalid Sheet Schema or etc.")
-			}
-			emojiURL = mapping
-		case err := <- errChan:
-			fmt.Println(err)
-			os.Exit(1)
-		}
-	}()
+
 	http.HandleFunc(conf.Server.EndPoint, func(w http.ResponseWriter, r *http.Request) {
 				w.WriteHeader(200)
 				w.Header().Set("Content-Type", "application/json; charset=utf-8")

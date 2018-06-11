@@ -15,8 +15,7 @@ import (
 	"time"
 )
 
-
-func getClient(secretJson string, tokFile string) (*http.Client, error) {
+func GetConfig(secretJson string) (*oauth2.Config, error){
 	secret :=filepath.ToSlash(secretJson)
 
 	b, err := ioutil.ReadFile(secret)
@@ -27,6 +26,11 @@ func getClient(secretJson string, tokFile string) (*http.Client, error) {
 	if err != nil {
 		return nil, err
 	}
+	return conf, err
+}
+
+func GetClient(ctx context.Context, conf *oauth2.Config, tokFile string) (*http.Client, error) {
+
 	tok, err := tokenFromFile(tokFile)
 	if err != nil {
 		tok, err = tokenFromVar(conf)
@@ -37,7 +41,7 @@ func getClient(secretJson string, tokFile string) (*http.Client, error) {
 		}
 	}
 
-	return conf.Client(context.Background(), tok), nil
+	return conf.Client(ctx, tok), nil
 }
 
 
@@ -53,7 +57,7 @@ func saveToken(tokFile string, tok *oauth2.Token) {
 
 func getTokenFromWeb(conf *oauth2.Config) *oauth2.Token {
 	authURL := conf.AuthCodeURL("state-token", oauth2.AccessTypeOffline)
-	fmt.Println("Go to the following link in your browser then type the auth code: %v\n", authURL)
+	fmt.Printf("Go to the following link in your browser then type the auth code: %v\n", authURL)
 	var authCode string
 	if _, err := fmt.Scan(&authCode); err != nil {
 		os.Exit(1)
@@ -101,11 +105,7 @@ func tokenFromFile(file string) (*oauth2.Token, error) {
 	return tok, err
 }
 
-func GetSheet(secret string, tokFile string) (*sheets.SpreadsheetsService, error) {
-	client, err := getClient(secret, tokFile)
-	if err != nil {
-		return nil, err
-	}
+func GetSheet(client *http.Client) (*sheets.SpreadsheetsService, error) {
 
 	s, err := sheets.New(client)
 	if err != nil {
