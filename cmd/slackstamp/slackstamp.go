@@ -26,7 +26,24 @@ func main() {
 		fmt.Println("Can't get oauth2 client")
 		os.Exit(1)
 	}
-	client, err := spreadsheet.GetClient(ctx, sconf, conf.SpreadSheet.Token)
+
+	tok := spreadsheet.GetToken(ctx, sconf, conf.SpreadSheet.Token)
+	errChan1 := make(chan error, 1)
+	go func () {
+		t := time.NewTicker(50 * time.Minute)
+		for {
+			select {
+			case <-t.C:
+				tok, err = spreadsheet.RefreshToken(ctx, sconf, tok)
+				if err != nil {
+					errChan1 <- err
+				}
+			}
+		}
+	t.Stop()
+	}()
+
+	client := spreadsheet.GetClient(ctx, sconf, tok)
 	if err != nil {
 		fmt.Println("Can't get http.client")
 		os.Exit(1)
@@ -36,7 +53,7 @@ func main() {
 		fmt.Println("Can't get sheet")
 		os.Exit(1)
 	}
-	errChan := make(chan error, 1)
+	errChan2 := make(chan error, 1)
 	emojiURL := map[string]string{}
 	go func() {
 		t := time.NewTicker(5 * time.Minute)
@@ -46,7 +63,7 @@ func main() {
 				mapping, err := spreadsheet.SetMapping(srv, conf.SpreadSheet.ID, conf.SpreadSheet.Name)
 				emojiURL = mapping
 				if err != nil{
-				errChan <- err
+				errChan2 <- err
 				}
 			}
 		}

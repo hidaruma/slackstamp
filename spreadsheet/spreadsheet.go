@@ -29,7 +29,7 @@ func GetConfig(secretJson string) (*oauth2.Config, error){
 	return conf, err
 }
 
-func GetClient(ctx context.Context, conf *oauth2.Config, tokFile string) (*http.Client, error) {
+func GetToken(ctx context.Context, conf *oauth2.Config, tokFile string) *oauth2.Token {
 
 	tok, err := tokenFromFile(tokFile)
 	if err != nil {
@@ -40,10 +40,25 @@ func GetClient(ctx context.Context, conf *oauth2.Config, tokFile string) (*http.
 			saveToken(tokFile, tok)
 		}
 	}
-
-	return conf.Client(ctx, tok), nil
+	return tok
 }
 
+func RefreshToken(ctx context.Context, conf *oauth2.Config, tk *oauth2.Token) (*oauth2.Token, error) {
+	ts := conf.TokenSource(ctx, tk)
+	ntk, err := ts.Token()
+	if err != nil {
+		fmt.Println("Can't get new token")
+		return nil, err
+	}
+	if ntk.AccessToken != tk.AccessToken {
+		return ntk, nil
+	}
+	return tk, nil
+}
+
+func GetClient(ctx context.Context, conf *oauth2.Config, token *oauth2.Token) *http.Client {
+	return conf.Client(ctx, token)
+}
 
 func saveToken(tokFile string, tok *oauth2.Token) {
 	fp := filepath.ToSlash(tokFile)
