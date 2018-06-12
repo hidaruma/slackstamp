@@ -325,13 +325,13 @@ func getHistory(channelID string, st string) (*SlackHistory, error) {
 
 func RemoveStamp(sm *SlackMessage, st string) error {
 	apiURL := slackAPI + "/api/chat.delete"
-	re := regexp.MustCompile(`^rmstamp\s(.+)`)
+	re := regexp.MustCompile(`^rmstamp\s<(.+)>$`)
 	msURL := re.FindStringSubmatch(sm.Text)
 	if msURL[1] == "" {
 		return errors.New("Invalid URL\n")
 	}
 	fmt.Println(msURL[1])
-	reMs := regexp.MustCompile(`^<https://.+\.slack\.com/archives/(.+)/.+$`)
+	reMs := regexp.MustCompile(`^https://.+\.slack\.com/archives/(.+)/.+$`)
 	m := reMs.FindStringSubmatch(msURL[1])
 	channelID := m[1]
 	fmt.Println(channelID)
