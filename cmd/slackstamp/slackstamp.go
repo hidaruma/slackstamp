@@ -61,10 +61,11 @@ func main() {
 			select{
 			case <-t.C:
 				mapping, err := spreadsheet.SetMapping(srv, conf.SpreadSheet.ID, conf.SpreadSheet.Name)
-				emojiURL = mapping
+
 				if err != nil{
 				errChan2 <- err
 				}
+				emojiURL = mapping
 			}
 		}
 		t.Stop()

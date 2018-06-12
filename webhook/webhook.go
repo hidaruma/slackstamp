@@ -320,6 +320,8 @@ type Message struct {
 	Type string `json:"type"`
 	Ts string `json:"ts"`
 	User string `json:"user,omitempty"`
+	DisplayAsBot bool `json:"display_as_bot,omitempty"`
+	File File `json:"file,omitempty"`
 	Text string `json:text,omitempty`
 	IsStarred bool `json:"is_starred,omitempty"`
 	Reactions []Reaction `json:"reactions,omitempty"`
@@ -330,6 +332,66 @@ type Message struct {
 	Subtype string `json:"subtype,omitempty"`
 	Icons Icons `json:"icons,omitempty"`
 	Mrkdwn bool `json:"mrkdwn,omitempty"`
+
+}
+type File struct {
+	ID string `json:"id"`
+	Title string `json:"title"`
+	Timestamp string `json:"timestamp"`
+	Name string `json:"name,omitempty"`
+	Filetype string `json:"filetype"`
+	Mimetype string `json:"mimetype,omitempty"`
+	PrettyType string `json:"pretty_type,omitempty"`
+	Editable bool `json:"editable"`
+	Mode string `json:"mode,omitempty"`
+	Size json.Number `json:"size"`
+	IsExternal bool `json:"is_external"`
+	ExternalType string `json:"external_type,omitempty"`
+	IsPublic bool `json:"is_public"`
+	PublicURLShared bool `json:"public_url_shared"`
+	URLPrivate string `json:"url_private,omitempty"`
+	URLPrivateDownload string `json:"url_private_download,omitempty"`
+	Created json.Number `json:"created"`
+	Thumb64 string `json:"thumb_64,omitempty"`
+	Thumb80 string `json:"thumb_80,omitempty"`
+	Thumb360 string `json:"thumb_360,omitempty"`
+	Thumb360H json.Number `json:"thumb_360_h,omitempty"`
+	Thumb360W json.Number `json:"thumb_360_w,omitempty"`
+	Thumb480 string `json:"thumb_480,omitempty"`
+	Thumb480H json.Number `json:"thumb_480_h,omitempty"`
+	Thumb480W json.Number `json:"thumb_480_w,omitempty"`
+	Thumb720 string `json:"thumb_720,omitempty"`
+	Thumb800 string `json:"thumb_800,omitempty"`
+	Thumb720H json.Number `json:"thumb_720_h,omitempty"`
+	Thumb720W json.Number `json:"thumb_720_w,omitempty"`
+	Thumb960 string `json:"thumb_960,omitempty"`
+	Thumb960H json.Number `json:"thumb_960_h,omitempty"`
+	Thumb960W json.Number `json:"thumb_960_w,omitempty"`
+	Thumb1024 string `json:"thumb_1024,omitempty"`
+	Thumb1024H json.Number `json:"thumb_1024_h,omitempty"`
+	Thumb1024W json.Number `json:"thumb_1024_w,omitempty"`
+	OriginalH json.Number `json:"original_h,omitempty"`
+	OriginalW json.Number `json:"original_w,omitempty"`
+	ImageExifRotation json.Number `json:"image_exif_rotation,omitempty"`
+	User string `json:"user,omitempty"`
+	UserName string `json:"username,omitempty"`
+	PermalinkPublic string `json:"permalink_public,omitempty"`
+	CommentsCount json.Number `json:"comments_count,omitempty"`
+	Permalink string `json:"permalink,omitempty"`
+	Channles []string `json:"channels,omitempty"`
+	Groups []string `json:"groups,omitempty"`
+	Ims []string `json:"ims,omitempty"`
+	InitialComment Comment `json:"initial_comment,omitempty"`
+}
+
+
+type Comment struct {
+	ID string `json:"id"`
+	Created json.Number `json:"created"`
+	Timestamp string `json:"timestamp"`
+	User string `json:"user,omitempty"`
+	IsIntro bool `json:"is_intro"`
+	Comment string `json:"comment"`
 
 }
 
