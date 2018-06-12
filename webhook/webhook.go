@@ -279,7 +279,7 @@ type Message struct {
 	Text string `json:text,omitempty`
 	IsStarred bool `json:"is_starred,omitempty"`
 	Reactions []Reaction `json:"reactions,omitempty"`
-
+	ClientMsgID string `json:"client_msg_id,omitempty"`
 	UserName string `json:"username,omitempty"`
 	BotID string `json:"bot_id,omitempty"`
 	Attachments []Attachment `json:"attachments,omitempty"`
@@ -339,9 +339,14 @@ func RemoveStamp(sm *SlackMessage, st string) error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("%#v\n", sh)
+	if !sh.Ok {
+		return errors.New("invalid channel\n")
+	}
 	var ts string
 	for _, ms := range sh.Messages {
+		if ms.Type != "message" || ms.BotID != "" {
+			continue
+		}
 		plink, err := getPermalinks(channelID, ms.Ts, st)
 		fmt.Println(plink)
 		if err != nil {
