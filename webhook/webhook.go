@@ -282,7 +282,7 @@ func getPermalinks(chID string, ts string, st string) (string, error) {
 	vals.Set("token", st)
 	vals.Add("channel", chID)
 	vals.Add("message_ts", ts)
-	req, err := http.NewRequest("POST", apiURL, nil)
+	req, err := http.NewRequest("GET", apiURL, nil)
 	if err != nil {
 		fmt.Println("get slack permalink")
 		return "", err
@@ -355,7 +355,7 @@ func getHistory(channelID string, st string) (*SlackHistory, error) {
 	vals := url.Values{}
 	vals.Set("token", st)
 	vals.Add("channel", channelID)
-	req, err := http.NewRequest("POST", apiURL, nil)
+	req, err := http.NewRequest("GET", apiURL, nil)
 	if err != nil {
 		fmt.Println("can't get slack history")
 		return nil, err
