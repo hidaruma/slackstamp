@@ -436,11 +436,11 @@ func getHistory(channelID string, st string) (*SlackHistory, error) {
 		return nil, err
 	}
 	var sh SlackHistory
-	fmt.Println("unmarshal start")
+
 	if err = json.Unmarshal(shJson, &sh); err != nil {
 		return nil, err
 	}
-	fmt.Println("Unmarshal End")
+
 	return &sh, nil
 }
 
@@ -468,15 +468,19 @@ func RemoveStamp(sm *SlackMessage, st string) error {
 	var ts string
 	for _, ms := range sh.Messages {
 		if ms.Type == "message" {
+			if ms.UseName == sm.UserName {
+				plink, err := getPermalinks(channelID, ms.Ts, st)
+				fmt.Println(plink)
+				if err != nil {
+					fmt.Printf("Got error %v\n", err)
+				}
+				fmt.Println(plink)
+				if plink == msURL[1] {
+					ts = ms.Ts
+				}
 
-			plink, err := getPermalinks(channelID, ms.Ts, st)
-			fmt.Println(plink)
-			if err != nil {
-				fmt.Printf("Got error %v\n", err)
-			}
-			fmt.Println(plink)
-			if plink == msURL[1] {
-				ts = ms.Ts
+			} else {
+				fmt.Println("Not the user")
 			}
 		} else {
 			fmt.Println("Not message")
