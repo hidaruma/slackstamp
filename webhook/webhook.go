@@ -399,8 +399,8 @@ func IsRmStamp(word string) bool {
 }
 
 func IsEmoji(emoji string) bool {
-	emojiRune := []rune(emoji)
-	if emojiRune[0] == ':' && ( emojiRune[len(emoji)-1] == ':' || (emojiRune[len(emoji) -1] == '\n' && emojiRune[len(emoji) -2] == ':' )){
+	re := regexp.MustCompile(`^:.+:$`)
+	if re.MatchString(emoji) {
 		return true
 	} 
 	return false
