@@ -234,11 +234,11 @@ type SlackPermalink struct {
 }
 
 func getPermalinks(chID string, ts string, st string) (string, error) {
-	apiURL := slackAPI + "/api/chat.getpermalink"
+	apiURL := slackAPI + "/api/chat.getPermalink"
 	vals := url.Values{}
 	vals.Set("token", st)
 	vals.Add("channel", chID)
-	vals.Add("ts", ts)
+	vals.Add("message_ts", ts)
 	req, err := http.NewRequest("POST", apiURL, nil)
 	if err != nil {
 		fmt.Println("get slack permalink")
