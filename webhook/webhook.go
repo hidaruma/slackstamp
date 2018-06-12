@@ -408,6 +408,7 @@ func RemoveStamp(sm *SlackMessage, st string) error {
 		if err != nil {
 			fmt.Printf("Got error %v\n", err)
 		}
+		fmt.Println(plink)
 		if plink == msURL[1] {
 			ts = ms.Ts
 		}
