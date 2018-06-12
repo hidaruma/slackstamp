@@ -234,7 +234,7 @@ type SlackPermalink struct {
 }
 
 func getPermalinks(chID string, ts string, st string) (string, error) {
-	apiURL := slackAPI + "/api/chat.getPermalink"
+	apiURL := slackAPI + "chat.getPermalink"
 	vals := url.Values{}
 	vals.Set("token", st)
 	vals.Add("channel", chID)
@@ -295,7 +295,7 @@ type Reaction struct {
 
 
 func getHistory(channelID string, st string) (*SlackHistory, error) {
-	apiURL := slackAPI + "/api/chat.history"
+	apiURL := slackAPI + "chat.history"
 	vals := url.Values{}
 	vals.Set("token", st)
 	vals.Add("channel", channelID)
@@ -324,7 +324,7 @@ func getHistory(channelID string, st string) (*SlackHistory, error) {
 }
 
 func RemoveStamp(sm *SlackMessage, st string) error {
-	apiURL := slackAPI + "/api/chat.delete"
+	apiURL := slackAPI + "chat.delete"
 	re := regexp.MustCompile(`^rmstamp\s<(.+)>$`)
 	msURL := re.FindStringSubmatch(sm.Text)
 	if msURL[1] == "" {
