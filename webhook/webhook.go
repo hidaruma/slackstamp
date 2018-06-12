@@ -330,7 +330,7 @@ func RemoveStamp(sm *SlackMessage, st string) error {
 		return errors.New("Invalid URL\n")
 	}
 
-	reMs := regexp.MustCompile(`^https://.+\.slack\.com/archives/(.+)/.+$`)
+	reMs := regexp.MustCompile(`^<https://.+\.slack\.com/archives/(.+)/.+$`)
 	m := reMs.FindStringSubmatch(sm.Text)
 	channelID := m[1]
 
