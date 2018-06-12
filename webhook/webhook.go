@@ -187,6 +187,25 @@ type Attachment struct {
 	Ts float64 `json:"ts,omitempty"`
 }
 
+
+type AttachmentHistory struct {
+	Fallback string `json:"fallback,omitempty"`
+	Color string `json:"color,omitempty"`
+	AuthorName string `json:"author_name,omitempty"`
+	AuthorLink string `json:"author_link,omitempty"`
+	AuthorIcon string `json:"author_icon,omitempty"`
+	Title string `json:"title,omitempty"`
+	TitleLink string `json:"title_link,omitempty"`
+	Fields []Field `json:"fields,omitempty"`
+	Pretext string `json:"pretext,omitempty"`
+	Text string `json:"text,omitempty"`
+	ImageURL string `json:"image_url,omitempty"`
+	ThumbURL string `json:"thumb_url,omitempty"`
+	Footer string `json:"footer,omitempty"`
+	FooterIcon string `json:"footer_icon,omitempty"`
+	Ts string `json:"ts,omitempty"`
+}
+
 type Field struct {
 	Title string `json:"title,omitempty"`
 	Value string `json:"value,omitempty"`
@@ -282,7 +301,7 @@ type Message struct {
 	ClientMsgID string `json:"client_msg_id,omitempty"`
 	UserName string `json:"username,omitempty"`
 	BotID string `json:"bot_id,omitempty"`
-	Attachments []Attachment `json:"attachments,omitempty"`
+	Attachments []AttachmentHistory `json:"attachments,omitempty"`
 	Subtype string `json:"subtype,omitempty"`
 
 }
