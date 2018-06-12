@@ -332,7 +332,7 @@ func RemoveStamp(sm *SlackMessage, st string) error {
 
 	reMs := regexp.MustCompile(`^<https://.+\.slack\.com/archives/(.+)/.+$`)
 	m := reMs.FindStringSubmatch(msURL[0])
-	channelID := m[1]
+	channelID := m[0]
 
 	sh, err := getHistory(channelID, st)
 	if err != nil {
