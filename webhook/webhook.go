@@ -396,7 +396,7 @@ func RemoveStamp(sm *SlackMessage, st string) error {
 		return err
 	}
 	if !sh.Ok {
-		return errors.New("invalid channel\n")
+		return errors.New(sh.Error)
 	}
 	var ts string
 	for _, ms := range sh.Messages {
