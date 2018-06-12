@@ -295,13 +295,13 @@ type Reaction struct {
 
 
 func getHistory(channelID string, st string) (*SlackHistory, error) {
-	apiURL := slackAPI + "chat.history"
+	apiURL := slackAPI + "channels.history"
 	vals := url.Values{}
 	vals.Set("token", st)
 	vals.Add("channel", channelID)
 	req, err := http.NewRequest("POST", apiURL, nil)
 	if err != nil {
-		fmt.Println("get slack history")
+		fmt.Println("can't get slack history")
 		return nil, err
 	}
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
