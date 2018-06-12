@@ -468,7 +468,7 @@ func RemoveStamp(sm *SlackMessage, st string) error {
 	var ts string
 	for _, ms := range sh.Messages {
 		if ms.Type == "message" {
-			if ms.BotID != "" {
+			if (ms.BotID != "") && (ms.UserName == sm.UserName) {
 				plink, err := getPermalinks(channelID, ms.Ts, st)
 				fmt.Println(plink)
 				if err != nil {
@@ -476,10 +476,12 @@ func RemoveStamp(sm *SlackMessage, st string) error {
 				}
 				if plink == msURL[1] {
 					ts = ms.Ts
+				} else {
+					fmt.Println("Unmatched")
 				}
 
 			} else {
-				fmt.Println("Not the bot")
+				fmt.Println("Not the bot or the user")
 			}
 		} else {
 			fmt.Println("Not message")
