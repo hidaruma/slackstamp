@@ -461,7 +461,7 @@ func RemoveStamp(sm *SlackMessage, st string) error {
 		return err
 	}
 	fmt.Printf("%#v\n", sh)
-	if !sh.Ok {
+	if sh.Error != "" {
 		return errors.New(sh.Error)
 	}
 
