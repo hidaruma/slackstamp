@@ -336,7 +336,7 @@ type Message struct {
 type Icon struct {
 	Emoji string `json:"emoji,omitempty"`
 	Image36 string `json:"image_36,omitempty"`
-	Image64 string `json:"image_48,omitempty"`
+	Image48 string `json:"image_48,omitempty"`
 	Image64 string `json:"image_64,omitempty"`
 	Image72 string `json:"image_72,omitempty"`
 	Image96 string `json:"image_96,omitempty"`
