@@ -328,12 +328,12 @@ type Message struct {
 	BotID string `json:"bot_id,omitempty"`
 	Attachments []AttachmentHistory `json:"attachments,omitempty"`
 	Subtype string `json:"subtype,omitempty"`
-	Icons []Icon `json:"icons,omitempty"`
+	Icons Icons `json:"icons,omitempty"`
 	Mrkdwn bool `json:"mrkdwn,omitempty"`
 
 }
 
-type Icon struct {
+type Icons struct {
 	Emoji string `json:"emoji,omitempty"`
 	Image36 string `json:"image_36,omitempty"`
 	Image48 string `json:"image_48,omitempty"`
