@@ -389,7 +389,7 @@ func RemoveStamp(sm *SlackMessage, st string) error {
 
 
 func IsRmStamp(word string) bool {
-	re := regexp.MustCompile(`^rmstamp\s .+`)
+	re := regexp.MustCompile(`^rmstamp\s.+`)
 	if re.MatchString(word) {
 		return true
 	}
