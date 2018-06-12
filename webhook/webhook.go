@@ -304,6 +304,7 @@ func getPermalinks(chID string, ts string, st string) (string, error) {
 	if err := json.Unmarshal(spJson, sp); err != nil {
 		return "", err
 	}
+	fmt.Println(sp)
 	return sp.Permalink, nil
 }
 
@@ -462,7 +463,7 @@ func RemoveStamp(sm *SlackMessage, st string) error {
 	}
 	var ts string
 	for _, ms := range sh.Messages {
-		if ms.Type != "message" || ms.BotID != "" {
+		if ms.Type != "message" {
 			continue
 		}
 		plink, err := getPermalinks(channelID, ms.Ts, st)
