@@ -10,6 +10,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"io/ioutil"
+	"regexp"
 )
 
 type SlackMessage struct {
@@ -205,7 +206,6 @@ func EncodeStamp(sm *SlackMessage, st string, stampURL string) ([]byte, error) {
 	iconURL, err := getUserIcon(sm.UserID, st)
 	if err != nil {
 		fmt.Println("Error get user icon")
-		return nil, err
 	}
 	pmp := PostMessageParameters{
 	//Channel: sm.ChannelID,
@@ -226,6 +226,175 @@ func EncodeStamp(sm *SlackMessage, st string, stampURL string) ([]byte, error) {
 	return res, nil
 }
 
+type SlackPermalink struct {
+	Ok bool `json:"ok"`
+	Channel string `json:"channel,omitempty"`
+	Permalink string `json:"permalink,omitempty"`
+	Error string `json:"error,omitempty"`
+}
+
+func getPermalinks(chID string, ts string, st string) (string, error) {
+	apiURL := slackAPI + "/api/chat.getpermalink"
+	vals := url.Values{}
+	vals.Set("token", st)
+	vals.Add("channel", chID)
+	vals.Add("ts", ts)
+	req, err := http.NewRequest("POST", apiURL, nil)
+	if err != nil {
+		fmt.Println("get slack permalink")
+		return "", err
+	}
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.URL.RawQuery = vals.Encode()
+	client := new(http.Client)
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+	sp := SlackPermalink{}
+
+	spJson, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+	if err := json.Unmarshal(spJson, sp); err != nil {
+		return "", err
+	}
+	return sp.Permalink, nil
+}
+
+type SlackHistory struct {
+	Ok bool `json:"bool"`
+	Latest string `json:"latest,omitempty"`
+	Messages []Message `json:"messages,omitempty"`
+	HasMore bool `json:"has_more,omitempty"`
+	Error string `json:"error,omitempty"`
+}
+
+type Message struct {
+	Type string `json:"type"`
+	Ts string `json:"ts"`
+	User string `json:"user,omitempty"`
+	Text string `json:text,omitempty`
+	IsStarred bool `json:"is_starred,omitempty"`
+	Reactions []Reaction `json:"reactions,omitempty"`
+
+	UserName string `json:"username,omitempty"`
+	BotID string `json:"bot_id,omitempty"`
+	Attachments []Attachment `json:"attachments,omitempty"`
+	Subtype string `json:"subtype,omitempty"`
+
+}
+
+type Reaction struct {
+	Name string `json:"name"`
+	Count int `json:"count"`
+	Users []string `json:"users"`
+}
+
+
+func getHistory(channelID string, st string) (*SlackHistory, error) {
+	apiURL := slackAPI + "/api/chat.history"
+	vals := url.Values{}
+	vals.Set("channel_id", channelID)
+	req, err := http.NewRequest("POST", apiURL, nil)
+	if err != nil {
+		fmt.Println("get slack history")
+		return nil, err
+	}
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.URL.RawQuery = vals.Encode()
+	client := new(http.Client)
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	shJson, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+	var sh SlackHistory
+	if err = json.Unmarshal(shJson, &sh); err != nil {
+		return nil, err
+	}
+	return &sh, nil
+}
+
+func RemoveStamp(sm *SlackMessage, st string) error {
+	apiURL := slackAPI + "/api/chat.delete"
+	re := regexp.MustCompile(`^rmstamp\s(.+)`)
+	msURL := re.FindString(sm.Text)
+	if msURL == "" {
+		return errors.New("Invalid URL\n")
+	}
+
+	reMs := regexp.MustCompile(`^https://.+\.slack\.com/archives/(.+)/.+$`)
+	m := reMs.FindStringSubmatch(sm.Text)
+	channelID := m[1]
+
+	sh, err := getHistory(channelID, st)
+	if err != nil {
+		return err
+	}
+
+	var ts string
+	for _, ms := range sh.Messages {
+		plink, err := getPermalinks(channelID, ms.Ts, st)
+		if err != nil {
+			fmt.Printf("Got error %v\n", err)
+		}
+		if plink == msURL {
+			ts = ms.Ts
+		}
+	}
+	if ts == "" {
+		return errors.New("Can't get TS\n")
+	}
+
+	vals := url.Values{}
+	vals.Set("token", st)
+	vals.Add("channel", channelID)
+	vals.Add("ts", ts)
+	vals.Add("as_user", "true")
+
+	req, err := http.NewRequest("POST", apiURL, nil)
+	if err != nil {
+		fmt.Println("Remove Stamp Err")
+		return err
+	}
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.URL.RawQuery = vals.Encode()
+	client := new(http.Client)
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	rmJson, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return errors.New("remove message JSON parse Error\n")
+	}
+	rm := RemoveJson{}
+	if err = json.Unmarshal(rmJson, &rm); err != nil {
+		fmt.Println("Json Unmarshal Error")
+		return err
+	}
+	if !rm.Ok {
+		return errors.New(rm.Error)
+	}
+	return nil
+}
+
+
+func IsRmStamp(word string) bool {
+	re := regexp.MustCompile(`^rmstamp\s .+`)
+	if re.MatchString(word) {
+		return true
+	}
+	return false
+}
 
 func IsEmoji(emoji string) bool {
 	emojiRune := []rune(emoji)

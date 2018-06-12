@@ -79,12 +79,21 @@ func main() {
 				}
 				fmt.Printf("%#v\n", sm)
 				fmt.Println("Parse OK")
+				if webhook.IsRmStamp(sm.Text) {
+					if err = webhook.RemoveStamp(sm, conf.Slack.Token); err != nil {
+						fmt.Println(err)
+					}
+				}
+
 				if webhook.IsEmoji(sm.Text) {
 					stampURL := webhook.GetStampURL(sm.Text, emojiURL)
 					if stampURL == "" {
 						fmt.Println("No match stampURL")
 					} else {
-						webhook.RemoveEmoji(sm, conf.Slack.Token)
+						err = webhook.RemoveEmoji(sm, conf.Slack.Token)
+						if err != nil {
+							fmt.Println(err)
+						}
 						res, err := webhook.EncodeStamp(sm, conf.Slack.Token, stampURL)
 						if err != nil {
 							fmt.Printf("EncodeStampError:%v\n", err)
