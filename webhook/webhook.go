@@ -463,17 +463,19 @@ func RemoveStamp(sm *SlackMessage, st string) error {
 	}
 	var ts string
 	for _, ms := range sh.Messages {
-		if ms.Type != "message" {
-			continue
-		}
-		plink, err := getPermalinks(channelID, ms.Ts, st)
-		fmt.Println(plink)
-		if err != nil {
-			fmt.Printf("Got error %v\n", err)
-		}
-		fmt.Println(plink)
-		if plink == msURL[1] {
-			ts = ms.Ts
+		if ms.Type == "message" {
+
+			plink, err := getPermalinks(channelID, ms.Ts, st)
+			fmt.Println(plink)
+			if err != nil {
+				fmt.Printf("Got error %v\n", err)
+			}
+			fmt.Println(plink)
+			if plink == msURL[1] {
+				ts = ms.Ts
+			}
+		} else {
+			fmt.Println("Not message")
 		}
 	}
 	if ts == "" {
