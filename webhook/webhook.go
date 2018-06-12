@@ -203,7 +203,7 @@ type AttachmentHistory struct {
 	ThumbURL string `json:"thumb_url,omitempty"`
 	Footer string `json:"footer,omitempty"`
 	FooterIcon string `json:"footer_icon,omitempty"`
-	Ts int `json:"ts,omitempty"`
+	Ts json.Number `json:"ts,omitempty"`
 }
 
 type Field struct {
