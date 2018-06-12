@@ -297,7 +297,8 @@ type Reaction struct {
 func getHistory(channelID string, st string) (*SlackHistory, error) {
 	apiURL := slackAPI + "/api/chat.history"
 	vals := url.Values{}
-	vals.Set("channel_id", channelID)
+	vals.Set("token", st)
+	vals.Add("channel_id", channelID)
 	req, err := http.NewRequest("POST", apiURL, nil)
 	if err != nil {
 		fmt.Println("get slack history")
