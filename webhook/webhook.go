@@ -284,7 +284,7 @@ func getPermalinks(chID string, ts string, st string) (string, error) {
 	vals.Add("message_ts", ts)
 	req, err := http.NewRequest("GET", apiURL, nil)
 	if err != nil {
-		fmt.Println("get slack permalink")
+		fmt.Println("Can't get slack permalink")
 		return "", err
 	}
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
@@ -301,7 +301,7 @@ func getPermalinks(chID string, ts string, st string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	if err := json.Unmarshal(spJson, sp); err != nil {
+	if err := json.Unmarshal(spJson, &sp); err != nil {
 		return "", err
 	}
 	fmt.Println(sp)
