@@ -436,9 +436,11 @@ func getHistory(channelID string, st string) (*SlackHistory, error) {
 		return nil, err
 	}
 	var sh SlackHistory
+	fmt.Println("unmarshal start")
 	if err = json.Unmarshal(shJson, &sh); err != nil {
 		return nil, err
 	}
+	fmt.Println("Unmarshal End")
 	return &sh, nil
 }
 

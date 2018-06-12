@@ -35,7 +35,7 @@
     "context",
     "context/ctxhttp"
   ]
-  revision = "1e491301e022f8f977054da4c2d852decd59571f"
+  revision = "db08ff08e8622530d9ed3a0e8ac279f6d4c02196"
 
 [[projects]]
   branch = "master"
@@ -58,7 +58,7 @@
     "googleapi/internal/uritemplates",
     "sheets/v4"
   ]
-  revision = "ef86ce4234efee96020bde00391d6a9cfae66561"
+  revision = "615303b5b813ad1dfe4d9c804d8397610a6c33b9"
 
 [[projects]]
   name = "google.golang.org/appengine"
