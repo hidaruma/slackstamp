@@ -187,12 +187,34 @@ type Attachment struct {
 	Ts float64 `json:"ts,omitempty"`
 }
 
+type MkdwnIn struct {
+	Text string `json:"text,omitempty"`
+	Pretext string `json:"pretext,omitempty"`
+}
 
 type AttachmentHistory struct {
+	ID json.Number `json:"id"`
 	Fallback string `json:"fallback,omitempty"`
 	Color string `json:"color,omitempty"`
 	AuthorName string `json:"author_name,omitempty"`
+	AuthorSubname string `json:"author_subname,omitempty"`
+	FromURL string `json:"from_url,omitempty"`
+	ChannelID string `json:"channel_id,omitempty"`
+	ChannelName string `json:"channel_name,omitempty"`
+	IsMsgUnfURL bool `json:"is_msg_unfurl,omitempty"`
+	MrkdwnIn MkdwnIn `json:"mkdwn_in,omitempty"`
+	OriginalURL string `json:"original_url,omitempty"`
+	MsgSubtype string `json:"msg_subtype,omitempty"`
+
+	VideoHtml string `json:"video_html,omitempty"`
+	VideoHtmlWidth json.Number `json:"video_html_width,omitempty"`
+	VideoHtmlHeight json.Number `json:"video_html_height,omitempty"`
+
+	ServiceName string `json:"service_name,omitempty"`
+	ServiceURL string `json:"service_url,omitempty"`
+
 	AuthorLink string `json:"author_link,omitempty"`
+	AuthorID string `json:"author_id,omitempty"`
 	AuthorIcon string `json:"author_icon,omitempty"`
 	Title string `json:"title,omitempty"`
 	TitleLink string `json:"title_link,omitempty"`
@@ -201,6 +223,8 @@ type AttachmentHistory struct {
 	Text string `json:"text,omitempty"`
 	ImageURL string `json:"image_url,omitempty"`
 	ThumbURL string `json:"thumb_url,omitempty"`
+	ThumbWidth json.Number `json:"thumb_width,omitempty"`
+	ThumbHeight json.Number `json:"thumb_height,omitempty"`
 	Footer string `json:"footer,omitempty"`
 	FooterIcon string `json:"footer_icon,omitempty"`
 	Ts json.Number `json:"ts,omitempty"`
@@ -289,6 +313,7 @@ type SlackHistory struct {
 	Messages []Message `json:"messages,omitempty"`
 	HasMore bool `json:"has_more,omitempty"`
 	Error string `json:"error,omitempty"`
+	IsLimited bool `json:"is_limited,omitempty"`
 }
 
 type Message struct {
@@ -303,7 +328,19 @@ type Message struct {
 	BotID string `json:"bot_id,omitempty"`
 	Attachments []AttachmentHistory `json:"attachments,omitempty"`
 	Subtype string `json:"subtype,omitempty"`
+	Icons []Icon `json:"icons,omitempty"`
+	Mrkdwn bool `json:"mrkdwn,omitempty"`
 
+}
+
+type Icon struct {
+	Emoji string `json:"emoji,omitempty"`
+	Image36 string `json:"image_36,omitempty"`
+	Image64 string `json:"image_48,omitempty"`
+	Image64 string `json:"image_64,omitempty"`
+	Image72 string `json:"image_72,omitempty"`
+	Image96 string `json:"image_96,omitempty"`
+	Image128 string `json:"image_128,omitempty"`
 }
 
 type Reaction struct {
