@@ -468,7 +468,7 @@ func RemoveStamp(sm *SlackMessage, st string) error {
 	var ts string
 	for _, ms := range sh.Messages {
 		if ms.Type == "message" {
-			if ms.UseName == sm.UserName {
+			if ms.UserName == sm.UserName {
 				plink, err := getPermalinks(channelID, ms.Ts, st)
 				fmt.Println(plink)
 				if err != nil {
