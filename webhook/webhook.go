@@ -338,7 +338,7 @@ type Message struct {
 type File struct {
 	ID string `json:"id"`
 	Title string `json:"title"`
-	Timestamp string `json:"timestamp"`
+	Timestamp json.Number `json:"timestamp"`
 	Name string `json:"name,omitempty"`
 	Filetype string `json:"filetype"`
 	Mimetype string `json:"mimetype,omitempty"`
