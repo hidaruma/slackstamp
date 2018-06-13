@@ -468,6 +468,7 @@ func RemoveStamp(sm *SlackMessage, st string) error {
 	usrapiURL := slackAPI +  "users.profile.get"
 	usrvals := url.Values{}
 	usrvals.Set("token", st)
+	usrvals.Add("user", sm.UserID)
 	usrreq, err := http.NewRequest("GET", usrapiURL, nil)
 	usrreq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
