@@ -460,7 +460,7 @@ func RemoveStamp(sm *SlackMessage, st string) error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("%#v\n", sh)
+
 	if sh.Error != "" {
 		return errors.New(sh.Error)
 	}
@@ -488,8 +488,9 @@ func RemoveStamp(sm *SlackMessage, st string) error {
 	if err := json.Unmarshal(userJson, &up); err != nil {
 		return err
 	}
-
-	if sm.UserName != up.Profile.DisplayName {
+	fmt.Printf("%#v\n", up.Profile)
+	fmt.Printf("%#v\n", sm.UserName)
+	if sm.UserName != up.Profile.DisplayNameNormalized {
 		return errors.New("Unmatched userID between userName\n")
 	}
 
