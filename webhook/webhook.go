@@ -165,7 +165,7 @@ type PostMessageParameters struct {
 	IconURL string `json:"icon_url"`
 	Text string `json:"text"`
 	Attachments []Attachment `json:"attachments"`
-//	AsUser bool `json:"as_user"`
+	AsUser bool `json:"as_user"`
 //	User string `json:"user"`
 }
 
@@ -256,7 +256,7 @@ func EncodeStamp(sm *SlackMessage, st string, stampURL string) ([]byte, error) {
 	UserName: sm.UserName,
 	IconURL: iconURL,
 	Attachments: ats,
-//	AsUser: true,
+	AsUser: false,
 //	User: sm.UserID,
 	}
 	fmt.Printf("%#v\n", pmp)
@@ -523,7 +523,7 @@ func RemoveStamp(sm *SlackMessage, st string) error {
 	vals.Set("token", st)
 	vals.Add("channel", channelID)
 	vals.Add("ts", ts)
-	
+
 
 	req, err := http.NewRequest("POST", apiURL, nil)
 	if err != nil {
