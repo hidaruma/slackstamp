@@ -50,10 +50,7 @@ func RefreshToken(ctx context.Context, conf *oauth2.Config, tk *oauth2.Token) (*
 		fmt.Println("Can't get new token")
 		return nil, err
 	}
-	if ntk.AccessToken != tk.AccessToken {
-		return ntk, nil
-	}
-	return tk, nil
+	return ntk, nil
 }
 
 func GetClient(ctx context.Context, conf *oauth2.Config, token *oauth2.Token) *http.Client {

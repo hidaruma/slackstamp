@@ -465,6 +465,34 @@ func RemoveStamp(sm *SlackMessage, st string) error {
 		return errors.New(sh.Error)
 	}
 
+	usrapiURL := slackAPI +  "users.profile.get"
+	usrvals := url.Values{}
+	usrvals.Set("token", st)
+	usrvals.Add("user", sm.UserID)
+	usrreq, err := http.NewRequest("GET", usrapiURL, nil)
+	usrreq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
+	if err != nil {
+		return err
+	}
+	usrreq.URL.RawQuery = usrvals.Encode()
+	client := new(http.Client)
+	resp, err := client.Do(usrreq)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	userJson, err := ioutil.ReadAll(resp.Body)
+	var up UserProfile
+	fmt.Println(string(userJson))
+	if err := json.Unmarshal(userJson, &up); err != nil {
+		return err
+	}
+
+	if sm.UserName != up.Profile.DisplayName {
+		return errors.New("Unmatched userID between userName\n")
+	}
+
 	var ts string
 	for _, ms := range sh.Messages {
 		if ms.Type == "message" {
