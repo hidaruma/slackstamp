@@ -45,12 +45,8 @@ func GetToken(ctx context.Context, conf *oauth2.Config, tokFile string) *oauth2.
 
 func RefreshToken(ctx context.Context, conf *oauth2.Config, tk *oauth2.Token) (*oauth2.Token, error) {
 	ts := conf.TokenSource(ctx, tk)
-	ntk, err := ts.Token()
-	if err != nil {
-		fmt.Println("Can't get new token")
-		return nil, err
-	}
-	return ntk, nil
+	ntk := oauth2.ReuseTokenSource(tk, ts)
+	return ntk.Token()
 }
 
 func GetClient(ctx context.Context, conf *oauth2.Config, token *oauth2.Token) *http.Client {
