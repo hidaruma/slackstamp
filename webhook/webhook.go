@@ -476,13 +476,13 @@ func RemoveStamp(sm *SlackMessage, st string) error {
 		return err
 	}
 	usrreq.URL.RawQuery = usrvals.Encode()
-	client := new(http.Client)
-	resp, err := client.Do(usrreq)
+	usrclient := new(http.Client)
+	usrresp, err := usrclient.Do(usrreq)
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
-	userJson, err := ioutil.ReadAll(resp.Body)
+	defer usrresp.Body.Close()
+	userJson, err := ioutil.ReadAll(usrresp.Body)
 	var up UserProfile
 	fmt.Println(string(userJson))
 	if err := json.Unmarshal(userJson, &up); err != nil {
