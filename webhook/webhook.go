@@ -256,7 +256,7 @@ func EncodeStamp(sm *SlackMessage, st string, stampURL string) ([]byte, error) {
 	UserName: sm.UserName,
 	IconURL: iconURL,
 	Attachments: ats,
-	AsUser: false,
+//	AsUser: false,
 //	User: sm.UserID,
 	}
 	fmt.Printf("%#v\n", pmp)
@@ -524,6 +524,7 @@ func RemoveStamp(sm *SlackMessage, st string) error {
 	vals.Set("token", st)
 	vals.Add("channel", channelID)
 	vals.Add("ts", ts)
+	vals.Add("as_user", "true")
 
 
 	req, err := http.NewRequest("POST", apiURL, nil)
